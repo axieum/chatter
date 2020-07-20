@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "chatter",
+  "version": "${version}",
+  "name": "Chatter",
+  "description": "Take control of your server's chat",
+  "authors": [
+    "Axieum"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Axieum/Chatter",
+    "sources": "https://github.com/Axieum/Chatter",
+    "issues": "https://github.com/Axieum/Chatter/issues"
+  },
+  "license": "MIT",
+  "icon": "logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "server": [
+      "me.axieum.mcmod.chatter.Chatter"
+    ]
+  },
+  "mixins": [
+    "chatter.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": ">=1.16"
+  }
+}
