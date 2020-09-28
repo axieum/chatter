@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "chatter-styling",
+  "version": "${version}",
+  "name": "Chatter Styling",
+  "description": "Add-on for Chatter to change how players see each other's messages",
+  "authors": [
+    "Axieum"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Axieum/Chatter",
+    "sources": "https://github.com/Axieum/Chatter",
+    "issues": "https://github.com/Axieum/Chatter/issues"
+  },
+  "license": "MIT",
+  "icon": "logo.png",
+  "environment": "server",
+  "entrypoints": {
+    "server": [
+      "me.axieum.mcmod.chatter.impl.styling.ChatterStyling"
+    ]
+  },
+  "mixins": [
+    "chatter-styling.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": ">=1.16",
+    "chatter": "*"
+  },
+  "custom": {
+    "modmenu:parent": "chatter"
+  }
+}
