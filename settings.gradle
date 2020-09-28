@@ -13,3 +13,4 @@ pluginManagement {
 rootProject.name = 'chatter'
 
 include 'chatter-api'
+include 'chatter-filtering'

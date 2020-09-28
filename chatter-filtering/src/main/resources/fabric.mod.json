@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "chatter-filtering",
+  "version": "${version}",
+  "name": "Chatter Filtering",
+  "description": "Add-on to Chatter for cleaning up your chat by filtering and/or replacing words or phrases",
+  "authors": [
+    "Axieum"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Axieum/Chatter",
+    "sources": "https://github.com/Axieum/Chatter",
+    "issues": "https://github.com/Axieum/Chatter/issues"
+  },
+  "license": "MIT",
+  "icon": "logo.png",
+  "environment": "server",
+  "entrypoints": {
+    "server": [
+      "me.axieum.mcmod.chatter.impl.filtering.ChatterFiltering"
+    ]
+  },
+  "mixins": [
+    "chatter-filtering.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": ">=1.16",
+    "chatter": "*"
+  },
+  "custom": {
+    "modmenu:parent": "chatter"
+  }
+}
