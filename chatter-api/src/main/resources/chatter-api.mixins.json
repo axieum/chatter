@@ -3,8 +3,13 @@
   "minVersion": "0.8",
   "package": "me.axieum.mcmod.chatter.mixin",
   "compatibilityLevel": "JAVA_8",
-  "server": [],
-  "client": [],
+  "server": [
+    "event.chat.ServerPlayNetworkHandlerMixin"
+  ],
+  "client": [
+    "event.chat.client.ClientPlayNetworkHandlerMixin",
+    "event.chat.client.ScreenMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
