@@ -3,6 +3,7 @@ package me.axieum.mcmod.chatter.mixin.styling;
 import com.mojang.authlib.GameProfile;
 import me.axieum.mcmod.chatter.impl.styling.callback.ReceiveChatCallback;
 import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,6 +15,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerManager.class)
 public class PlayerManagerMixin
 {
+    @Inject(method = "remove", at = @At(value = "TAIL"))
+    public void remove(ServerPlayerEntity player, CallbackInfo ci)
+    {
+        ReceiveChatCallback.PLAYER_CACHE.remove(player.getUuid());
+    }
+
     @Inject(method = "addToOperators", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/OperatorList;add(Lnet/minecraft/server/ServerConfigEntry;)V"))
     public void addToOperators(GameProfile profile, CallbackInfo ci)
     {
