@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "chatter-api",
+  "version": "${version}",
+  "name": "Chatter API",
+  "description": "Exposes an API to Chatter",
+  "authors": [
+    "Axieum"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Axieum/Chatter",
+    "sources": "https://github.com/Axieum/Chatter",
+    "issues": "https://github.com/Axieum/Chatter/issues"
+  },
+  "license": "MIT",
+  "icon": "logo.png",
+  "environment": "*",
+  "entrypoints": {},
+  "mixins": [
+    "chatter-api.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "minecraft": ">=1.16"
+  },
+  "custom": {
+    "modmenu:parent": "chatter",
+    "modmenu:api": true
+  }
+}
