@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.axieum.mcmod.chatter.mixin.styling",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [],
+  "server": [
+    "PlayerManagerMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
