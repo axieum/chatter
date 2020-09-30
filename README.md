@@ -67,7 +67,7 @@ _Don't see your question? [Ask it here](https://github.com/Axieum/Chatter/issues
 
 ## Contributing
 
-Thank you for considering contributing to Chatter! Please see the [Contribution Guidelines](CONTRIBUTING.md).
+Thank you for considering contributing to Chatter! Please see the [Contribution Guidelines](.github/CONTRIBUTING.md).
 
 ## Security Vulnerabilities
 
