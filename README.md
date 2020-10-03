@@ -24,9 +24,10 @@ you can stay connected with what's happening on your server.
 
 1. [Features](#features)
     - [Filtering](#innocent-filtering)
-    - [Styling](#art-styling)
     - [Named Animal/Monster Death Messages](#scream-named-animalmonster-death-messages)
     - [Nicknames](#smile-nicknames)
+    - [Ranged Messages](#dart-ranged-messages) 
+    - [Styling](#art-styling)
 2. [FAQ.](#faq)
 3. [Contributing](#contributing)
 4. [Security Vulnerabilities](#security-vulnerabilities)
