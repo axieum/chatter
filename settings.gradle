@@ -14,3 +14,4 @@ rootProject.name = 'chatter'
 
 include 'chatter-api'
 include 'chatter-styling'
+include 'chatter-world'
