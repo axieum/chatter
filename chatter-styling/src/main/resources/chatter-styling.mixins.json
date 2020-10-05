@@ -3,9 +3,12 @@
   "minVersion": "0.8",
   "package": "me.axieum.mcmod.chatter.mixin.styling",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [],
+  "mixins": [
+    "PlayerEntityMixin"
+  ],
   "server": [
-    "PlayerManagerMixin"
+    "PlayerManagerMixin",
+    "ServerPlayerEntityMixin"
   ],
   "client": [],
   "injectors": {

@@ -1,6 +1,7 @@
 package me.axieum.mcmod.chatter.impl.styling.callback;
 
 import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
+import me.axieum.mcmod.chatter.impl.styling.ChatterStyling;
 import me.axieum.mcmod.chatter.impl.styling.config.StylingConfig;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -10,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import static me.axieum.mcmod.chatter.impl.styling.ChatterStyling.CONFIG;
 import static me.axieum.mcmod.chatter.impl.styling.ChatterStyling.LOGGER;
@@ -21,7 +21,6 @@ import static me.axieum.mcmod.chatter.impl.styling.ChatterStyling.LOGGER;
 public class ReceiveChatCallback implements ChatEvents.ReceiveChat
 {
     public static final HashMap<UUID, StylingConfig.ChatStyle> PLAYER_CACHE = new HashMap<>();
-    private static final Pattern COLOR_CODE_PATTERN = Pattern.compile("(?i)&([0-9a-fk-or])");
 
     @Override
     @Nullable
@@ -49,7 +48,7 @@ public class ReceiveChatCallback implements ChatEvents.ReceiveChat
 
         // Apply styling rules
         if (style.color)
-            raw = COLOR_CODE_PATTERN.matcher(raw).replaceAll("\u00A7$1");
+            raw = ChatterStyling.COLOR_CODE_PATTERN.matcher(raw).replaceAll("\u00A7$1");
 
         // Define a message formatter
         final MessageFormat formatter = new MessageFormat()

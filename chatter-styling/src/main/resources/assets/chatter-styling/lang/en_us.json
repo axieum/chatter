@@ -1,0 +1,5 @@
+{
+  "command.chatter.nickname.success": "Others will now see you as %s on this server.",
+  "command.chatter.nickname.taken": "That nickname is already in use!",
+  "command.chatter.nickname.denied": "You do not have permission to change that player's nickname!"
+}

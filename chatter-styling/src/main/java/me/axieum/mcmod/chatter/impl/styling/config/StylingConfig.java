@@ -32,6 +32,19 @@ public class StylingConfig implements ConfigData
         public boolean color = false;
     }
 
+    @Comment("Player Nicknames/Aliases")
+    public Nickname nickname = new Nickname();
+
+    public static class Nickname
+    {
+        @Comment("Permission level required by players to set their own nicknames\n" +
+                 "Reference https://minecraft.gamepedia.com/Server.properties#op-permission-level")
+        public int permissionLevel = 0;
+
+        @Comment("True if nicknames can contain colour codes, i.e. &[0-9a-fk-or]")
+        public boolean color = false;
+    }
+
     /**
      * Registers and prepares a new configuration instance.
      *
