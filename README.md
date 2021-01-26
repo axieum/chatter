@@ -23,6 +23,7 @@ This Minecraft mod allows you take control of various aspects of your server's c
 you can stay connected with what's happening on your server.
 
 1. [Features](#features)
+    - [Discord](#people_holding_hands-discord)
     - [Filtering](#innocent-filtering)
     - [Named Animal/Monster Death Messages](#scream-named-animalmonster-death-messages)
     - [Nicknames](#smile-nicknames)
@@ -34,6 +35,10 @@ you can stay connected with what's happening on your server.
 5. [Licence](#licence)
 
 ## Features
+
+### :people_holding_hands: Discord
+
+Bring your Minecraft world into your [Discord](https://discord.com) guild.
 
 ### :innocent: Filtering
 
