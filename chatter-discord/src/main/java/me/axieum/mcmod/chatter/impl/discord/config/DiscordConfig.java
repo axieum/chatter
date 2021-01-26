@@ -1,13 +1,18 @@
 package me.axieum.mcmod.chatter.impl.discord.config;
 
+import me.axieum.mcmod.chatter.impl.discord.config.module.BotConfig;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
-import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
+import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry.Category;
 import me.sargunvohra.mcmods.autoconfig1u.serializer.JanksonConfigSerializer;
+import me.sargunvohra.mcmods.autoconfig1u.serializer.PartitioningSerializer;
 
 @Config(name = "chatter/discord")
-public class DiscordConfig implements ConfigData
+public class DiscordConfig extends PartitioningSerializer.GlobalData
 {
+    @Category("Discord Bot")
+    public BotConfig bot = new BotConfig();
+
     /**
      * Registers and prepares a new configuration instance.
      *
@@ -15,7 +20,7 @@ public class DiscordConfig implements ConfigData
      */
     public static DiscordConfig init()
     {
-        return AutoConfig.register(DiscordConfig.class, JanksonConfigSerializer::new)
+        return AutoConfig.register(DiscordConfig.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new))
                          .getConfig();
     }
 }

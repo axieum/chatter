@@ -16,6 +16,9 @@
   "icon": "logo.png",
   "environment": "server",
   "entrypoints": {
+    "preLaunch": [
+      "me.axieum.mcmod.chatter.impl.discord.ChatterDiscord"
+    ],
     "server": [
       "me.axieum.mcmod.chatter.impl.discord.ChatterDiscord"
     ]
