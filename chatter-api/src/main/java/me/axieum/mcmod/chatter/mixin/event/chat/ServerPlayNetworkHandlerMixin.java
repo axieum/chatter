@@ -23,7 +23,7 @@ public abstract class ServerPlayNetworkHandlerMixin
     /**
      * Redirects received player chat messages on the server to allow mutating the message.
      */
-    @Redirect(method = "onGameMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;broadcastChatMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/MessageType;Ljava/util/UUID;)V"))
+    @Redirect(method = "method_31286", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;broadcastChatMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/MessageType;Ljava/util/UUID;)V"))
     private void onChatMessage(PlayerManager manager, Text text, MessageType type, UUID uuid)
     {
         final String raw = (String) ((TranslatableText) text).getArgs()[1];

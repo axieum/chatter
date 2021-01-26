@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath group: 'org.kohsuke', name: 'github-api', version: '1.116'
+        classpath group: 'org.kohsuke', name: 'github-api', version: '1.122'
     }
 }
 

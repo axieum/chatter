@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * Injects into player permission changes, expiring cached player styles.
  */
 @Mixin(PlayerManager.class)
-public class PlayerManagerMixin
+public abstract class PlayerManagerMixin
 {
     @Inject(method = "remove", at = @At(value = "TAIL"))
     public void remove(ServerPlayerEntity player, CallbackInfo ci)
