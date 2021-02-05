@@ -44,6 +44,7 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
     public void onInitializeServer()
     {
         // Register Minecraft callbacks
+        ServerLifecycleEvents.SERVER_STARTING.register(new ServerLifecycleCallback());
         ServerLifecycleEvents.SERVER_STARTED.register(new ServerLifecycleCallback());
         ServerLifecycleEvents.SERVER_STOPPING.register(new ServerLifecycleCallback());
         ServerLifecycleEvents.SERVER_STOPPED.register(new ServerLifecycleCallback());
