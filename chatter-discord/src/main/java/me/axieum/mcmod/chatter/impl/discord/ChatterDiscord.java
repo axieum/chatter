@@ -1,13 +1,17 @@
 package me.axieum.mcmod.chatter.impl.discord;
 
+import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
 import me.axieum.mcmod.chatter.api.event.discord.BuildJDACallback;
+import me.axieum.mcmod.chatter.api.event.player.PlayerEvents;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordLifecycleListener;
-import me.axieum.mcmod.chatter.impl.discord.callback.minecraft.ServerLifecycleCallback;
+import me.axieum.mcmod.chatter.impl.discord.callback.minecraft.*;
 import me.axieum.mcmod.chatter.impl.discord.config.DiscordConfig;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.fabricmc.api.DedicatedServerModInitializer;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,11 +47,18 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
     @Override
     public void onInitializeServer()
     {
-        // Register Minecraft callbacks
+        // Register server lifecycle callbacks
         ServerLifecycleEvents.SERVER_STARTING.register(new ServerLifecycleCallback());
         ServerLifecycleEvents.SERVER_STARTED.register(new ServerLifecycleCallback());
         ServerLifecycleEvents.SERVER_STOPPING.register(new ServerLifecycleCallback());
         ServerLifecycleEvents.SERVER_STOPPED.register(new ServerLifecycleCallback());
+        // Register player callbacks
+        ServerPlayConnectionEvents.JOIN.register(new PlayerConnectionCallback());
+        ServerPlayConnectionEvents.DISCONNECT.register(new PlayerConnectionCallback());
+        ChatEvents.RECEIVE_CHAT.register(new ReceiveChatCallback());
+        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(new PlayerChangeWorldCallback());
+        PlayerEvents.DEATH.register(new PlayerDeathCallback());
+        PlayerEvents.GRANT_CRITERION.register(new PlayerAdvancementCallback());
     }
 
     /**

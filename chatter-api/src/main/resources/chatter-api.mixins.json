@@ -4,7 +4,9 @@
   "package": "me.axieum.mcmod.chatter.mixin",
   "compatibilityLevel": "JAVA_8",
   "server": [
-    "event.chat.ServerPlayNetworkHandlerMixin"
+    "event.chat.ServerPlayNetworkHandlerMixin",
+    "event.player.PlayerAdvancementTrackerMixin",
+    "event.player.ServerPlayerEntityMixin"
   ],
   "client": [
     "event.chat.client.ClientPlayNetworkHandlerMixin",

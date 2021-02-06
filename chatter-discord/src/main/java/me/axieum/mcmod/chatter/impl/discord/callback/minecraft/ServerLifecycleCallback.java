@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.ServerSt
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.ServerStopping;
 import net.minecraft.server.MinecraftServer;
 
+import java.awt.*;
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ public class ServerLifecycleCallback implements ServerStarting, ServerStarted, S
     // Prepare a reusable message formatter for all server lifecycle events
     private static final MessageFormat FORMATTER = new MessageFormat()
             .datetime("datetime", LocalDateTime::now)
-            .duration("elapsed", () -> Duration.ofMillis(ManagementFactory.getRuntimeMXBean().getUptime()));
+            .duration("uptime", () -> Duration.ofMillis(ManagementFactory.getRuntimeMXBean().getUptime()));
 
     @Override
     public void onServerStarting(MinecraftServer server)
@@ -44,7 +45,8 @@ public class ServerLifecycleCallback implements ServerStarting, ServerStarted, S
             // Update the Discord bot status
             jda.getPresence().setStatus(CONFIG.bot.status.started);
             // Dispatch a message to all configured channels
-            DiscordDispatcher.embed((embed, entry) -> embed.setDescription(FORMATTER.apply(entry.discord.started)),
+            DiscordDispatcher.embed((embed, entry) -> embed.setColor(Color.GREEN)
+                                                           .setDescription(FORMATTER.apply(entry.discord.started)),
                     (entry) -> entry.discord.started != null);
         });
     }
@@ -70,7 +72,8 @@ public class ServerLifecycleCallback implements ServerStarting, ServerStarted, S
             // Update the Discord bot status
             jda.getPresence().setStatus(CONFIG.bot.status.stopped);
             // Dispatch a message to all configured channels
-            DiscordDispatcher.embed((embed, entry) -> embed.setDescription(FORMATTER.apply(entry.discord.stopped)),
+            DiscordDispatcher.embed((embed, entry) -> embed.setColor(Color.RED)
+                                                           .setDescription(FORMATTER.apply(entry.discord.stopped)),
                     (entry) -> entry.discord.stopped != null);
             // Shutdown the JDA client
             LOGGER.info("Wrapping up...");
