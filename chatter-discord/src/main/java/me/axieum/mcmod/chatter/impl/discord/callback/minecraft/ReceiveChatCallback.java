@@ -4,6 +4,7 @@ import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
 import me.axieum.mcmod.chatter.impl.discord.ChatterDiscord;
 import me.axieum.mcmod.chatter.impl.discord.util.DiscordDispatcher;
 import me.axieum.mcmod.chatter.impl.discord.util.ServerUtils;
+import me.axieum.mcmod.chatter.impl.discord.util.StringUtils;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -20,7 +21,7 @@ public class ReceiveChatCallback implements ChatEvents.ReceiveChat
             final MessageFormat formatter = new MessageFormat()
                     .datetime("datetime")
                     .tokenize("player", player.getDisplayName().getString())
-                    .tokenize("message", raw)
+                    .tokenize("message", StringUtils.minecraftToDiscord(raw))
                     .tokenize("world", () -> ServerUtils.getWorldName(player.world)); // lazy world name
             // Dispatch a message to all configured channels
             DiscordDispatcher.dispatch((message, entry) -> message.append(formatter.apply(entry.discord.chat)),

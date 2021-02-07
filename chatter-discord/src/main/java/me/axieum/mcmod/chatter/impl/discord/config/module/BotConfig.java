@@ -32,4 +32,9 @@ public class BotConfig implements ConfigData
         @Comment("Status after the server has stopped")
         public OnlineStatus stopped = OnlineStatus.OFFLINE;
     }
+
+    @Comment("True if all guild members should be cached, in turn allowing @mentions\n" +
+            "NB: This requires the Privileged Gateway Intent 'Server Members' to be enabled on your Discord bot!")
+    @RequiresRestart
+    public boolean cacheMembers = false;
 }

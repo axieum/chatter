@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class ServerUtils
+public final class ServerUtils
 {
     public static final HashMap<UUID, Long> PLAYER_LOGINS = new HashMap<>();
     public static final HashMap<Identifier, String> WORLD_NAMES = new HashMap<>(3);

@@ -8,6 +8,9 @@ import me.axieum.mcmod.chatter.impl.discord.callback.minecraft.*;
 import me.axieum.mcmod.chatter.impl.discord.config.DiscordConfig;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -29,14 +32,22 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
     public void onPreLaunch()
     {
         try {
+            // Prepare the JDA client
             LOGGER.info("Getting ready...");
             final JDABuilder builder = JDABuilder.createDefault(CONFIG.bot.token)
                                                  // Update the bot status
                                                  .setStatus(CONFIG.bot.status.starting)
                                                  // Register listeners
                                                  .addEventListeners(new DiscordLifecycleListener());
-            BuildJDACallback.EVENT.invoker().onBuild(builder);
 
+            // Conditionally enable member caching
+            if (CONFIG.bot.cacheMembers)
+                builder.enableIntents(GatewayIntent.GUILD_MEMBERS) // enable required intents
+                       .setMemberCachePolicy(MemberCachePolicy.ALL) // cache all members
+                       .setChunkingFilter(ChunkingFilter.ALL); // eager-load all members
+
+            // Build and login to the client
+            BuildJDACallback.EVENT.invoker().onBuild(builder);
             LOGGER.info("Logging into Discord...");
             client = builder.build();
         } catch (LoginException | IllegalArgumentException e) {

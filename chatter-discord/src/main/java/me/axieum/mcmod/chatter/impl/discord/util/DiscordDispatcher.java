@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.LOGGER;
 
-public class DiscordDispatcher
+public final class DiscordDispatcher
 {
     /**
      * Builds and queues embed messages for each configured message entry.
