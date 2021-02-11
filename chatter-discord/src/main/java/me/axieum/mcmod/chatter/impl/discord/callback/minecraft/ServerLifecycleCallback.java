@@ -2,6 +2,7 @@ package me.axieum.mcmod.chatter.impl.discord.callback.minecraft;
 
 import me.axieum.mcmod.chatter.impl.discord.ChatterDiscord;
 import me.axieum.mcmod.chatter.impl.discord.util.DiscordDispatcher;
+import me.axieum.mcmod.chatter.impl.discord.util.ServerUtils;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.ServerStarted;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.ServerStarting;
@@ -27,6 +28,8 @@ public class ServerLifecycleCallback implements ServerStarting, ServerStarted, S
     @Override
     public void onServerStarting(MinecraftServer server)
     {
+        // Capture a reference to the server instance
+        ServerUtils.INSTANCE = server;
         // Send Discord notifications
         ChatterDiscord.getClient().ifPresent(jda -> {
             // Update the Discord bot status

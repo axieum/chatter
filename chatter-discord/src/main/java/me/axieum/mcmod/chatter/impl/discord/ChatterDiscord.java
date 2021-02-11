@@ -4,6 +4,7 @@ import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
 import me.axieum.mcmod.chatter.api.event.discord.BuildJDACallback;
 import me.axieum.mcmod.chatter.api.event.player.PlayerEvents;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordLifecycleListener;
+import me.axieum.mcmod.chatter.impl.discord.callback.discord.MessageReceivedListener;
 import me.axieum.mcmod.chatter.impl.discord.callback.minecraft.*;
 import me.axieum.mcmod.chatter.impl.discord.config.DiscordConfig;
 import net.dv8tion.jda.api.JDA;
@@ -70,6 +71,10 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(new PlayerChangeWorldCallback());
         PlayerEvents.DEATH.register(new PlayerDeathCallback());
         PlayerEvents.GRANT_CRITERION.register(new PlayerAdvancementCallback());
+        // Register Discord listeners
+        getClient().ifPresent(jda -> jda.addEventListener(
+                new MessageReceivedListener()
+        ));
     }
 
     /**

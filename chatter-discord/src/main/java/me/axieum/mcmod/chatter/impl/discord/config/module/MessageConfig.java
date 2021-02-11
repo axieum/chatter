@@ -83,8 +83,10 @@ public class MessageConfig implements ConfigData
 
         public static class Minecraft
         {
-            @Comment("A user sent a message")
-            public String chat;
+            @Comment("A user sent a message\n" +
+                    "NB: Use JSON style, check out https://minecraftjson.com/ (third party)\n" +
+                    "Usages: ${author}, ${tag}, ${message}, ${datetime[:format]}")
+            public String chat = "[\"\",{\"text\":\"${author}\",\"color\":\"blue\",\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Sent from Discord\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${message}\"}]";
 
             @Comment("A user edited their recently sent message")
             public String edit;
