@@ -86,7 +86,7 @@ public class MessageConfig implements ConfigData
             @Comment("A user sent a message\n" +
                     "NB: Use JSON style, check out https://minecraftjson.com/ (third party)\n" +
                     "Usages: ${author}, ${tag}, ${message}, ${datetime[:format]}")
-            public String chat = "[\"\",{\"text\":\"${author}\",\"color\":\"blue\",\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Sent from Discord\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${message}\"}]";
+            public String chat = "[\"\",{\"text\":\"${author}\",\"color\":\"aqua\",\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Sent from Discord\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${message}\"}]";
 
             @Comment("A user edited their recently sent message")
             public String edit;
@@ -97,8 +97,9 @@ public class MessageConfig implements ConfigData
             @Comment("A user removed their reaction from a recent message")
             public String unreact;
 
-            @Comment("A user sent a message that contained attachments")
-            public String attachment;
+            @Comment("A user sent a message that contained attachments\n" +
+                    "Usages: ${author}, ${tag}, ${url}, ${name}, ${ext}, ${size}, ${datetime[:format]}")
+            public String attachment = "[\"\",{\"text\":\"${author}\",\"color\":\"aqua\",\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Sent from Discord\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${name}\",\"color\":\"blue\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"${url}\"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":{\"text\":\"${ext} (${size})\"}}}]";
         }
     }
 

@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.entities.IMentionable;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -134,5 +136,22 @@ public final class StringUtils
             // Return the computed world name
             return new String(chars);
         });
+    }
+
+    /**
+     * Converts bytes to a human readable string, base 10.
+     *
+     * @param bytes number of bytes
+     * @return human readable bytes in base 10
+     */
+    public static String bytesToHuman(long bytes)
+    {
+        if (-1000 < bytes && bytes < 1000) return bytes + " B";
+        CharacterIterator ci = new StringCharacterIterator("kMGTPE");
+        while (bytes <= -999_950 || bytes >= 999_950) {
+            bytes /= 1000;
+            ci.next();
+        }
+        return String.format("%.1f %cB", bytes / 1000.0, ci.current());
     }
 }
