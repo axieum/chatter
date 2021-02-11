@@ -5,6 +5,9 @@ import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry.Category;
 import me.sargunvohra.mcmods.autoconfig1u.shadowed.blue.endless.jankson.Comment;
 
+import java.util.Arrays;
+import java.util.function.Predicate;
+
 @Config(name = "messages")
 public class MessageConfig implements ConfigData
 {
@@ -17,7 +20,7 @@ public class MessageConfig implements ConfigData
         public long id;
 
         @Comment("If defined, reduces the scope of all events to the listed Minecraft dimension IDs (empty for all)")
-        public int[] dimensions = {};
+        public String[] dimensions = {};
 
         @Category("Discord")
         @Comment("Minecraft events relayed to Discord")
@@ -94,6 +97,38 @@ public class MessageConfig implements ConfigData
 
             @Comment("A user sent a message that contained attachments")
             public String attachment;
+        }
+    }
+
+    /**
+     * Predicate for testing whether a dimension identifier is within scope of a message entry.
+     */
+    public static class DimensionPredicate implements Predicate<MessageEntry>
+    {
+        private final String dimension;
+
+        /**
+         * Constructs a new dimension predicate.
+         *
+         * @param dimension dimension identifier
+         */
+        public DimensionPredicate(String dimension)
+        {
+            this.dimension = dimension;
+        }
+
+        /**
+         * Tests whether a dimension identifier is within scope of a message entry.
+         *
+         * @param entry configured message entry with list of in-scope dimension identifiers
+         * @return true if the dimension identifier is contained in the entry's dimensions
+         */
+        @Override
+        public boolean test(MessageEntry entry)
+        {
+            return entry.dimensions != null
+                    && entry.dimensions.length > 0
+                    && Arrays.asList(entry.dimensions).contains(dimension);
         }
     }
 }

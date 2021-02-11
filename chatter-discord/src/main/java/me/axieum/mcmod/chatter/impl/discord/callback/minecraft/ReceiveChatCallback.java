@@ -22,7 +22,7 @@ public class ReceiveChatCallback implements ChatEvents.ReceiveChat
                     .datetime("datetime")
                     .tokenize("player", player.getDisplayName().getString())
                     .tokenize("message", StringUtils.minecraftToDiscord(raw))
-                    .tokenize("world", () -> ServerUtils.getWorldName(player.world)); // lazy world name
+                    .tokenize("world", () -> StringUtils.getWorldName(player.world)); // lazy world name
             // Dispatch a message to all configured channels
             DiscordDispatcher.dispatch((message, entry) -> message.append(formatter.apply(entry.discord.chat)),
                     (entry) -> entry.discord.chat != null);

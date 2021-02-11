@@ -104,36 +104,4 @@ public final class DiscordDispatcher
             });
         });
     }
-
-    /**
-     * Predicate for testing whether a dimension ID is within scope of a message entry.
-     */
-    public static class DimensionPredicate implements Predicate<MessageEntry>
-    {
-        public int dimension;
-
-        /**
-         * Constructs a new dimension predicate.
-         *
-         * @param dimension dimension ID
-         */
-        public DimensionPredicate(int dimension)
-        {
-            this.dimension = dimension;
-        }
-
-        /**
-         * Tests whether a dimension ID is within scope of a message entry.
-         *
-         * @param entry configured message entry with list of dimension IDs in scope
-         * @return true if the dimension ID is contained in the entry's dimensions
-         */
-        @Override
-        public boolean test(MessageEntry entry)
-        {
-            return entry.dimensions != null
-                    && entry.dimensions.length > 0
-                    && Arrays.stream(entry.dimensions).anyMatch(id -> dimension == id);
-        }
-    }
 }
