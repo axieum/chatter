@@ -14,6 +14,9 @@ public class ThemeConfig implements ConfigData
             "Use ${username} for the player's name, and ${size} for the height in pixels")
     public @Nullable String avatarUrl = "https://minotar.net/helm/${username}/${size}";
 
+    @Comment("True if emojis should be treated as unicode - useful if your players' client supports emojis")
+    public boolean useUnicodeEmojis = false;
+
     /**
      * Returns Minecraft avatar URL for a given player.
      *
@@ -24,7 +27,7 @@ public class ThemeConfig implements ConfigData
     @Nullable
     public String getAvatarUrl(PlayerEntity player, int size)
     {
-        if (this.avatarUrl != null && this.avatarUrl.length() == 0) return null;
+        if (this.avatarUrl == null || this.avatarUrl.length() == 0) return null;
         return new MessageFormat().tokenize("username", player.getDisplayName().getString())
                                   .tokenize("size", String.valueOf(size))
                                   .apply(this.avatarUrl);

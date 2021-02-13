@@ -1,5 +1,6 @@
 package me.axieum.mcmod.chatter.impl.discord.util;
 
+import com.vdurmont.emoji.EmojiParser;
 import me.axieum.mcmod.chatter.impl.discord.ChatterDiscord;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
 import net.dv8tion.jda.api.entities.IMentionable;
@@ -9,7 +10,10 @@ import net.minecraft.world.World;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.regex.Pattern;
+
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
 
 public final class StringUtils
 {
@@ -50,8 +54,14 @@ public final class StringUtils
                 .regex(Pattern.compile("(?<=[\u00A7]o)(.+?)(?=\\s?[\u00A7]r|$)"), g -> "_" + g.get(1) + "_")
                 // Translate strikethrough to markdown
                 .regex(Pattern.compile("(?<=[\u00A7]m)(.+?)(?=\\s?[\u00A7]r|$)"), g -> "~~" + g.get(1) + "~~")
-                // Resolve @mentions
-                .regex(Pattern.compile("@((?!everyone|here)\\w+)"), groups ->
+                // Resolve @mention#discriminator
+                .regex(Pattern.compile("@(\\w+?)#(\\d{4})"), g ->
+                        ChatterDiscord.getClient()
+                                      .flatMap(jda -> Optional.ofNullable(jda.getUserByTag(g.get(1), g.get(2))))
+                                      .map(IMentionable::getAsMention)
+                                      .orElse(g.get(0)))
+                // Resolve @mention
+                .regex(Pattern.compile("@((?!everyone|here)\\w+)(?!#\\d{4})\\b"), groups ->
                         ChatterDiscord.getClient()
                                       .flatMap(jda -> jda.getGuilds()
                                                          .stream()
@@ -60,7 +70,7 @@ public final class StringUtils
                                                          .findFirst())
                                       .map(IMentionable::getAsMention)
                                       .orElse(groups.get(0)))
-                // Resolve #channels
+                // Resolve #channel
                 .regex(Pattern.compile("#([^\\s]+)"), groups ->
                         ChatterDiscord.getClient()
                                       .flatMap(jda -> jda.getTextChannelsByName(groups.get(1), true)
@@ -94,7 +104,10 @@ public final class StringUtils
      */
     public static String discordToMinecraft(String message)
     {
-        return D_TO_M_FORMAT.apply(message);
+        // Apply the initial translation
+        final String translation = D_TO_M_FORMAT.apply(message);
+        // Conditionally apply emoji translations
+        return CONFIG.theme.useUnicodeEmojis ? translation : EmojiParser.parseToAliases(translation);
     }
 
     /**
