@@ -4,4 +4,5 @@ dependencies {
     implementation "com.jagrosh:jda-utilities:${JDA_UTILS_VERSION}"
     implementation "org.apache.logging.log4j:log4j-slf4j18-impl:${LOG4J_VERSION}"
     implementation "com.vdurmont:emoji-java:${EMOJI_JAVA_VERSION}"
+    implementation "io.github.java-diff-utils:java-diff-utils:${JAVA_DIFF_UTILS_VERSION}"
 }

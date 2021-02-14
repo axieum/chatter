@@ -88,8 +88,9 @@ public class MessageConfig implements ConfigData
                     "Usages: ${author}, ${tag}, ${message}, ${datetime[:format]}")
             public String chat = "[\"\",{\"text\":\"${author}\",\"color\":\"#00aaff\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"@${tag} \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Sent from Discord\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${message}\"}]";
 
-            @Comment("A user edited their recently sent message")
-            public String edit;
+            @Comment("A user edited their recently sent message\n" +
+                    "Usages: ${author}, ${tag}, ${diff}, ${original}, ${message}, ${datetime[:format]}")
+            public String edit = "[\"\",{\"text\":\"${author}\",\"color\":\"#00aaff\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"@${tag} \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Sent from Discord\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${diff}\"}]";
 
             @Comment("A user reacted to a recent message\n" +
                     "Usages: ${issuer}, ${issuer_tag}, ${author}, ${author_tag}, ${emote}, ${datetime[:format]}")
