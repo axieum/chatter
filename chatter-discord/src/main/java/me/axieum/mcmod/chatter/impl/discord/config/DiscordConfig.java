@@ -1,6 +1,7 @@
 package me.axieum.mcmod.chatter.impl.discord.config;
 
 import me.axieum.mcmod.chatter.impl.discord.config.module.BotConfig;
+import me.axieum.mcmod.chatter.impl.discord.config.module.CommandConfig;
 import me.axieum.mcmod.chatter.impl.discord.config.module.MessageConfig;
 import me.axieum.mcmod.chatter.impl.discord.config.module.ThemeConfig;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
@@ -17,6 +18,9 @@ public class DiscordConfig extends PartitioningSerializer.GlobalData
 
     @Category("Messages")
     public MessageConfig messages = new MessageConfig();
+
+    @Category("Commands")
+    public CommandConfig commands = new CommandConfig();
 
     @Category("Theme")
     public ThemeConfig theme = new ThemeConfig();

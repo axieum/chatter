@@ -1,13 +1,14 @@
 package me.axieum.mcmod.chatter.impl.discord;
 
+import com.jagrosh.jdautilities.command.CommandClient;
 import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
 import me.axieum.mcmod.chatter.api.event.discord.BuildJDACallback;
 import me.axieum.mcmod.chatter.api.event.player.PlayerEvents;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordLifecycleListener;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.MessageReactionListener;
-import me.axieum.mcmod.chatter.impl.discord.callback.discord.MessageReceivedListener;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.MessageUpdateListener;
 import me.axieum.mcmod.chatter.impl.discord.callback.minecraft.*;
+import me.axieum.mcmod.chatter.impl.discord.command.discord.DiscordCommands;
 import me.axieum.mcmod.chatter.impl.discord.config.DiscordConfig;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -30,6 +31,7 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
     public static final Logger LOGGER = LogManager.getLogger("Chatter|Discord");
     public static final DiscordConfig CONFIG = DiscordConfig.init();
     private static JDA client = null;
+    private static CommandClient commands = null;
 
     @Override
     public void onPreLaunch()
@@ -48,6 +50,10 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
                 builder.enableIntents(GatewayIntent.GUILD_MEMBERS) // enable required intents
                        .setMemberCachePolicy(MemberCachePolicy.ALL) // cache all members
                        .setChunkingFilter(ChunkingFilter.ALL); // eager-load all members
+
+            // Conditionally prepare and build the command client
+            if ((commands = DiscordCommands.build()) != null)
+                builder.addEventListeners(commands);
 
             // Build and login to the client
             BuildJDACallback.EVENT.invoker().onBuild(builder);
@@ -75,9 +81,9 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
         PlayerEvents.GRANT_CRITERION.register(new PlayerAdvancementCallback());
         // Register Discord listeners
         getClient().ifPresent(jda -> jda.addEventListener(
-                new MessageReceivedListener(),
-                new MessageReactionListener(),
-                new MessageUpdateListener()
+//                new MessageReceivedListener(), // NB: invoked via the command client (on non-commands)
+                new MessageUpdateListener(),
+                new MessageReactionListener()
         ));
     }
 
@@ -89,5 +95,15 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
     public static Optional<JDA> getClient()
     {
         return Optional.ofNullable(client);
+    }
+
+    /**
+     * Returns the underlying JDA command client.
+     *
+     * @return JDA command client if built
+     */
+    public static Optional<CommandClient> getCommandClient()
+    {
+        return Optional.ofNullable(commands);
     }
 }
