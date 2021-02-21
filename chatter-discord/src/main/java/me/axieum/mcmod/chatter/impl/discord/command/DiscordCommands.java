@@ -1,9 +1,13 @@
-package me.axieum.mcmod.chatter.impl.discord.command.discord;
+package me.axieum.mcmod.chatter.impl.discord.command;
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import com.jagrosh.jdautilities.command.CommandEvent;
 import me.axieum.mcmod.chatter.api.event.discord.BuildCommandClientCallback;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordCommandListener;
+import me.axieum.mcmod.chatter.impl.discord.command.discord.TPSCommand;
+import me.axieum.mcmod.chatter.impl.discord.command.discord.UptimeCommand;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.Arrays;
 
@@ -44,6 +48,13 @@ public final class DiscordCommands
             // Set the command listener
             builder.setListener(new DiscordCommandListener());
 
+            // Conditionally add built-in commands
+            if (CONFIG.commands.builtin.uptime.enabled)
+                builder.addCommand(new UptimeCommand());
+
+            if (CONFIG.commands.builtin.tps.enabled)
+                builder.addCommand(new TPSCommand());
+
             // Build the client
             BuildCommandClientCallback.EVENT.invoker().onBuild(builder);
             return builder.build();
@@ -51,5 +62,21 @@ public final class DiscordCommands
             LOGGER.warn("Unable to prepare the command client: {}", e.getMessage());
             return null;
         }
+    }
+
+    /**
+     * Replies to the invoker, notifying that the Minecraft server is unavailable.
+     */
+    public static void replyUnavailable(CommandEvent event)
+    {
+        event.reply(new EmbedBuilder().setColor(0xff8800).setDescription(CONFIG.commands.messages.unavailable).build());
+    }
+
+    /**
+     * Replies to the invoker, notifying that permission was denied.
+     */
+    public static void replyDenied(CommandEvent event)
+    {
+        event.reply(new EmbedBuilder().setColor(0xff0000).setDescription(CONFIG.commands.messages.denied).build());
     }
 }

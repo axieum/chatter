@@ -50,8 +50,7 @@ public final class MinecraftDispatcher
     @SafeVarargs
     public static void dispatch(Function<MessageEntry, @Nullable Text> supplier, Predicate<MessageEntry>... predicates)
     {
-        if (!ServerUtils.isReady()) return;
-        ServerUtils.getInstance().ifPresent(server -> {
+        ServerUtils.getInstance().filter(ServerUtils::isReady).ifPresent(server -> {
             // Prepare a stream of configured message entries
             Stream<MessageEntry> stream = Arrays.stream(CONFIG.messages.entries).parallel();
             // Filter the stream

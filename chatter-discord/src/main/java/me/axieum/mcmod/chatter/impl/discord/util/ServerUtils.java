@@ -4,6 +4,7 @@ import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.stream.LongStream;
 
 public final class ServerUtils
 {
@@ -21,12 +22,36 @@ public final class ServerUtils
     }
 
     /**
-     * Determines whether the server has finished loading.
+     * Determines whether a Minecraft server has finished loading.
      *
-     * @return true if the server is loaded
+     * @param server minecraft server
+     * @return true if the given server is loaded
      */
-    public static boolean isReady()
+    public static boolean isReady(@Nullable MinecraftServer server)
     {
-        return INSTANCE != null && INSTANCE.getTickTime() > 0;
+        return server != null && server.getTickTime() > 0;
+    }
+
+    /**
+     * Computes a server's average TPS.
+     *
+     * @param server Minecraft server
+     * @return average ticks per second (upper bound of 20)
+     */
+    public static double getAverageTPS(MinecraftServer server)
+    {
+        return Math.min(1000f / getAverageTPSTime(server), 20);
+    }
+
+    /**
+     * Computes a server's average TPS time.
+     *
+     * @param server Minecraft server
+     * @return average tick time in milliseconds
+     */
+    public static double getAverageTPSTime(MinecraftServer server)
+    {
+        // Average the last tick lengths, and convert from nanoseconds to milliseconds
+        return LongStream.of(server.lastTickLengths).average().orElse(0) * 1e-6d;
     }
 }

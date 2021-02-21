@@ -8,7 +8,7 @@ import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordLifecycleLis
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.MessageReactionListener;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.MessageUpdateListener;
 import me.axieum.mcmod.chatter.impl.discord.callback.minecraft.*;
-import me.axieum.mcmod.chatter.impl.discord.command.discord.DiscordCommands;
+import me.axieum.mcmod.chatter.impl.discord.command.DiscordCommands;
 import me.axieum.mcmod.chatter.impl.discord.config.DiscordConfig;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
