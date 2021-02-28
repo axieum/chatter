@@ -18,7 +18,7 @@ public class CommandConfig implements ConfigData
     public String[] admins = {};
 
     @Category("Messages")
-    @Comment("Feedback provided to the user whom triggered a command")
+    @Comment("Feedback provided to the user who triggered a command")
     public Messages messages = new Messages();
 
     public static class Messages
@@ -37,7 +37,7 @@ public class CommandConfig implements ConfigData
     public static class Builtin
     {
         @Category("Uptime Command")
-        @Comment("Displays how long the Minecraft server has been online for")
+        @Comment("Displays for how long the Minecraft server has been online")
         public Uptime uptime = new Uptime();
 
         public static class Uptime extends Base
@@ -45,7 +45,7 @@ public class CommandConfig implements ConfigData
             public Uptime()
             {
                 name = "uptime";
-                help = "Shows how long the server has been online for";
+                help = "Shows for how long the server has been online";
             }
 
             @Comment("A message template that is formatted and sent for the server's uptime\n" +
@@ -66,6 +66,29 @@ public class CommandConfig implements ConfigData
                 help = "Shows the server's current ticks per second";
             }
         }
+    }
+
+    @Category("Custom Commands")
+    @Comment("Custom Discord commands")
+    public Custom[] custom = new Custom[]{new Custom()};
+
+    public static class Custom extends Base
+    {
+        public Custom()
+        {
+            name = "whitelist";
+            aliases = new String[]{"wl"};
+            help = "Manages the whitelist for the server";
+            usage = "<list/add/remove> [username]";
+            enabled = false; // example custom commands should not be enabled by default
+        }
+
+        @Comment("True if the execution should not provide any feedback")
+        public boolean quiet = false;
+
+        @Comment("A Minecraft command to execute\n" +
+                "Use {n} for the nth argument, and {} for all")
+        public String command = "/whitelist {}";
     }
 
     /**

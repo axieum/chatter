@@ -36,7 +36,7 @@ public class TPSCommand extends Command
         // NB: Update to Java 9's `Optional#ifPresentOrElse` when Java 8 support is dropped
         final @Nullable MinecraftServer server = ServerUtils.getInstance().filter(ServerUtils::isReady).orElse(null);
 
-        // If the server is present and ready, reply with its uptime
+        // If the server is present and ready, handle the command
         if (server != null) {
             // Compute the server's mean ticks per second
             final double meanTPS = ServerUtils.getAverageTPS(server);

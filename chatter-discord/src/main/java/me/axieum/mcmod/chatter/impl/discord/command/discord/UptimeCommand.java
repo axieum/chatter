@@ -42,7 +42,7 @@ public class UptimeCommand extends Command
         // NB: Update to Java 9's `Optional#ifPresentOrElse` when Java 8 support is dropped
         final @Nullable MinecraftServer server = ServerUtils.getInstance().filter(ServerUtils::isReady).orElse(null);
 
-        // If the server is present and ready, reply with its uptime
+        // If the server is present and ready, handle the command
         if (server != null)
             event.reply(new EmbedBuilder().setDescription(FORMATTER.apply(CONFIG.commands.builtin.uptime.message))
                                           .build());

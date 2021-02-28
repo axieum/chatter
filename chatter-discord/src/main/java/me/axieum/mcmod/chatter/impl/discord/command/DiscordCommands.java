@@ -1,10 +1,12 @@
 package me.axieum.mcmod.chatter.impl.discord.command;
 
+import com.jagrosh.jdautilities.command.CommandBuilder;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.axieum.mcmod.chatter.api.event.discord.BuildCommandClientCallback;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordCommandListener;
+import me.axieum.mcmod.chatter.impl.discord.command.discord.MinecraftCommand;
 import me.axieum.mcmod.chatter.impl.discord.command.discord.TPSCommand;
 import me.axieum.mcmod.chatter.impl.discord.command.discord.UptimeCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -38,7 +40,7 @@ public final class DiscordCommands
             if (ownerIds.length > 0) {
                 // Assume the first identifier is the primary owner
                 builder.setOwnerId(ownerIds[0]);
-                // And the rest are co-owners
+                // ..and the rest are co-owners
                 if (ownerIds.length > 1)
                     builder.setCoOwnerIds(Arrays.copyOfRange(ownerIds, 1, ownerIds.length));
             } else {
@@ -54,6 +56,24 @@ public final class DiscordCommands
 
             if (CONFIG.commands.builtin.tps.enabled)
                 builder.addCommand(new TPSCommand());
+
+            // Add any custom commands
+            Arrays.stream(CONFIG.commands.custom)
+                  // Filter out disabled commands
+                  .filter(c -> c.enabled)
+                  // Build the commands
+                  .map(c -> {
+                      LOGGER.debug("Registering custom command: '{}{}' -> '{}'", CONFIG.commands.prefix, c.name, c.command);
+                      return new CommandBuilder()
+                              .setName(c.name)
+                              .setAliases(c.aliases)
+                              .setHelp(c.help)
+                              .setHidden(c.hidden)
+                              .setArguments(c.usage)
+                              .build(new MinecraftCommand(c.command, c.quiet));
+                  })
+                  // Register the commands
+                  .forEach(builder::addCommand);
 
             // Build the client
             BuildCommandClientCallback.EVENT.invoker().onBuild(builder);
