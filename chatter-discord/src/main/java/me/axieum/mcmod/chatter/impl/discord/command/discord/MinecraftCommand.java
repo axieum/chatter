@@ -65,7 +65,7 @@ public class MinecraftCommand implements BiConsumer<Command, CommandEvent>
             final String username = event.getMember().getEffectiveName();
             final ServerCommandSource source = new ServerCommandSource(
                     new DiscordCommandOutput(server, mcCommand, command, event),
-                    Vec3d.ZERO, Vec2f.ZERO, null,
+                    Vec3d.ZERO, Vec2f.ZERO, server.getOverworld(),
                     PERMISSION_LEVEL, username, new LiteralText(username),
                     server, null
             );
@@ -90,29 +90,25 @@ public class MinecraftCommand implements BiConsumer<Command, CommandEvent>
     /**
      * Replies with the command execution result.
      *
-     * @param event     JDA command event
-     * @param command   JDA command instance from Discord
-     * @param mcCommand Minecraft command that was executed
-     * @param result    Minecraft command execution feedback
-     * @param success   true if the command was a success
+     * @param event   JDA command event
+     * @param cmd     JDA command instance from Discord
+     * @param mcCmd   Minecraft command that was executed
+     * @param result  Minecraft command execution feedback
+     * @param success true if the command was a success
      */
-    public void reply(CommandEvent event, Command command, String mcCommand, String result, boolean success)
+    public void reply(CommandEvent event, Command cmd, String mcCmd, String result, boolean success)
     {
-        // Bail if this is a quiet command
-        if (quiet) return;
-
-        // Build an initial embed for the result
-        EmbedBuilder embed = new EmbedBuilder()
-                .setColor(success ? 0x00ff00 : 0xff0000) // green for success, red for failure
-                .setDescription(result);
+        // Build an initial embed for the result, green for success and red for failure
+        // NB: We should still fire an event regardless of whether the command is quiet
+        EmbedBuilder embed = !quiet ? new EmbedBuilder().setColor(success ? 0x00ff00 : 0xff0000).setDescription(result)
+                                    : null;
 
         // Fire a post-proxy event to let listeners intercept the result
-        if ((embed = MinecraftCommandEvents.AFTER_EXECUTE.invoker().afterExecute(
-                event, command, mcCommand, result, success, embed)) == null)
-            return;
+        embed = MinecraftCommandEvents.AFTER_EXECUTE.invoker().afterExecute(event, cmd, mcCmd, result, success, embed);
 
         // Build and reply with the resulting embed
-        event.reply(embed.build());
+        if (embed != null && !embed.isEmpty())
+            event.reply(embed.build());
     }
 
     /**

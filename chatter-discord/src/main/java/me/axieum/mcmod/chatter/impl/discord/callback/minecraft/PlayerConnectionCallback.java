@@ -32,13 +32,14 @@ public class PlayerConnectionCallback implements Join, Disconnect
         // Send Discord notifications
         ChatterDiscord.getClient().ifPresent(jda -> {
             // Prepare a message formatter
+            final String playerName = handler.player.getDisplayName().getString();
             final MessageFormat formatter = new MessageFormat()
                     .datetime("datetime")
-                    .tokenize("player", handler.player.getDisplayName().getString())
+                    .tokenize("player", playerName)
                     .tokenize("world", StringUtils.getWorldName(handler.player.world));
             // Dispatch a message to all configured channels
             DiscordDispatcher.embed((embed, entry) -> embed.setDescription(formatter.apply(entry.discord.join))
-                                                           .setThumbnail(CONFIG.theme.getAvatarUrl(handler.player, 16)),
+                                                           .setThumbnail(CONFIG.theme.getAvatarUrl(playerName, 16)),
                     (entry) -> entry.discord.join != null);
         });
     }
@@ -48,16 +49,16 @@ public class PlayerConnectionCallback implements Join, Disconnect
     {
         // Send Discord notifications
         ChatterDiscord.getClient().ifPresent(jda -> {
-            final ServerPlayerEntity player = handler.player;
             // Prepare a message formatter
+            final String playerName = handler.player.getDisplayName().getString();
             final MessageFormat formatter = new MessageFormat()
                     .datetime("datetime")
-                    .tokenize("player", player.getDisplayName().getString())
-                    .tokenize("world", StringUtils.getWorldName(player.world))
-                    .duration("elapsed", getPlayerElapsed(player));
+                    .tokenize("player", playerName)
+                    .tokenize("world", StringUtils.getWorldName(handler.player.world))
+                    .duration("elapsed", getPlayerElapsed(handler.player));
             // Dispatch a message to all configured channels
             DiscordDispatcher.embed((embed, entry) -> embed.setDescription(formatter.apply(entry.discord.leave))
-                                                           .setThumbnail(CONFIG.theme.getAvatarUrl(handler.player, 16)),
+                                                           .setThumbnail(CONFIG.theme.getAvatarUrl(playerName, 16)),
                     (entry) -> entry.discord.leave != null);
         });
 

@@ -4,7 +4,6 @@ import me.axieum.mcmod.chatter.impl.util.MessageFormat;
 import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
 import me.sargunvohra.mcmods.autoconfig1u.shadowed.blue.endless.jankson.Comment;
-import net.minecraft.entity.player.PlayerEntity;
 import org.jetbrains.annotations.Nullable;
 
 @Config(name = "theme")
@@ -18,17 +17,16 @@ public class ThemeConfig implements ConfigData
     public boolean useUnicodeEmojis = false;
 
     /**
-     * Returns Minecraft avatar URL for a given player.
+     * Returns a Minecraft avatar URL for the given player's name.
      *
-     * @param player Minecraft player
-     * @param size   height and width in pixels
+     * @param username Minecraft username
+     * @param size     height and width in pixels
      * @return formatted Minecraft avatar URL or null if template is not set
      */
-    @Nullable
-    public String getAvatarUrl(PlayerEntity player, int size)
+    public @Nullable String getAvatarUrl(final String username, final int size)
     {
         if (this.avatarUrl == null || this.avatarUrl.length() == 0) return null;
-        return new MessageFormat().tokenize("username", player.getDisplayName().getString())
+        return new MessageFormat().tokenize("username", username)
                                   .tokenize("size", String.valueOf(size))
                                   .apply(this.avatarUrl);
     }

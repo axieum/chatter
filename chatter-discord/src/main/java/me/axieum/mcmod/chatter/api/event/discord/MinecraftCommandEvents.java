@@ -57,7 +57,7 @@ public final class MinecraftCommandEvents
          * @param mcCommand command that was executed in Minecraft (without leading '/')
          * @param result    command execution feedback (from Minecraft) to be sent to Discord
          * @param success   true if the command was a success
-         * @param embed     embed builder used to build the embed that will be sent to Discord
+         * @param embed     embed builder used to build the embed that will be sent to Discord, or null if quiet command
          * @return embed builder used to build the embed that will be sent to Discord, or null to cancel
          */
         @Nullable
@@ -67,7 +67,7 @@ public final class MinecraftCommandEvents
                 String mcCommand,
                 String result,
                 boolean success,
-                EmbedBuilder embed
+                @Nullable EmbedBuilder embed
         );
     }
 }

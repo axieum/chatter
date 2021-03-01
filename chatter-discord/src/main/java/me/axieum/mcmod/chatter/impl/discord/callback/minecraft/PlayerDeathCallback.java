@@ -41,7 +41,7 @@ public class PlayerDeathCallback implements PlayerEvents.Death
             // Dispatch a message to all configured channels
             DiscordDispatcher.embed((embed, entry) -> embed.setColor(Color.RED)
                                                            .setDescription(formatter.apply(entry.discord.death))
-                                                           .setThumbnail(CONFIG.theme.getAvatarUrl(player, 16)),
+                                                           .setThumbnail(CONFIG.theme.getAvatarUrl(playerName, 16)),
                     (entry) -> entry.discord.death != null);
         });
     }

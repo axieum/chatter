@@ -3,7 +3,9 @@ package me.axieum.mcmod.chatter.impl.discord;
 import com.jagrosh.jdautilities.command.CommandClient;
 import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
 import me.axieum.mcmod.chatter.api.event.discord.JDAEvents;
+import me.axieum.mcmod.chatter.api.event.discord.MinecraftCommandEvents;
 import me.axieum.mcmod.chatter.api.event.player.PlayerEvents;
+import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordCommandListener;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordLifecycleListener;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.MessageReactionListener;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.MessageUpdateListener;
@@ -85,6 +87,7 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
                 new MessageUpdateListener(),
                 new MessageReactionListener()
         ));
+        MinecraftCommandEvents.AFTER_EXECUTE.register(new DiscordCommandListener.PlayerSkinInjector());
     }
 
     /**
