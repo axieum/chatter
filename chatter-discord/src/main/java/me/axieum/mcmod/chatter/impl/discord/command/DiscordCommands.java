@@ -67,9 +67,12 @@ public final class DiscordCommands
                       return new CommandBuilder()
                               .setName(c.name)
                               .setAliases(c.aliases)
+                              .setArguments(c.usage)
                               .setHelp(c.help)
                               .setHidden(c.hidden)
-                              .setArguments(c.usage)
+                              .setRequiredRole(c.role)
+                              .setCooldown(c.cooldown)
+                              .setCooldownScope(c.cooldownScope)
                               .build(new MinecraftCommand(c.command, c.quiet));
                   })
                   // Register the commands
@@ -90,13 +93,5 @@ public final class DiscordCommands
     public static void replyUnavailable(CommandEvent event)
     {
         event.reply(new EmbedBuilder().setColor(0xff8800).setDescription(CONFIG.commands.messages.unavailable).build());
-    }
-
-    /**
-     * Replies to the invoker, notifying that permission was denied.
-     */
-    public static void replyDenied(CommandEvent event)
-    {
-        event.reply(new EmbedBuilder().setColor(0xff0000).setDescription(CONFIG.commands.messages.denied).build());
     }
 }

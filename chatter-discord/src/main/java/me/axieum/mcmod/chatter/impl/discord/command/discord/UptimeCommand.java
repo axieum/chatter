@@ -3,6 +3,7 @@ package me.axieum.mcmod.chatter.impl.discord.command.discord;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.axieum.mcmod.chatter.impl.discord.command.DiscordCommands;
+import me.axieum.mcmod.chatter.impl.discord.config.module.CommandConfig;
 import me.axieum.mcmod.chatter.impl.discord.util.ServerUtils;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
+import java.util.Optional;
 
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
 
@@ -28,11 +30,15 @@ public class UptimeCommand extends Command
      */
     public UptimeCommand()
     {
-        this.name = CONFIG.commands.builtin.uptime.name;
-        this.aliases = CONFIG.commands.builtin.uptime.aliases;
-        this.arguments = CONFIG.commands.builtin.uptime.usage;
-        this.help = CONFIG.commands.builtin.uptime.help;
-        this.hidden = CONFIG.commands.builtin.uptime.hidden;
+        final CommandConfig.Builtin.Uptime cfg = CONFIG.commands.builtin.uptime;
+        this.name = cfg.name;
+        this.aliases = cfg.aliases;
+        this.arguments = cfg.usage;
+        this.help = cfg.help;
+        this.hidden = cfg.hidden;
+        this.requiredRole = cfg.role;
+        this.cooldown = cfg.cooldown;
+        this.cooldownScope = Optional.ofNullable(cfg.cooldownScope).orElse(CooldownScope.USER);
     }
 
     @Override

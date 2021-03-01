@@ -1,9 +1,11 @@
 package me.axieum.mcmod.chatter.impl.discord.config.module;
 
+import com.jagrosh.jdautilities.command.Command;
 import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry.Category;
 import me.sargunvohra.mcmods.autoconfig1u.shadowed.blue.endless.jankson.Comment;
+import org.jetbrains.annotations.Nullable;
 
 @Config(name = "commands")
 public class CommandConfig implements ConfigData
@@ -12,7 +14,7 @@ public class CommandConfig implements ConfigData
     public String prefix = "!";
 
     @Comment("If defined, exposes a command to display help")
-    public String helpWord = "help";
+    public @Nullable String helpWord = "help";
 
     @Comment("Identifiers for users within Discord to whom to grant all permissions")
     public String[] admins = {};
@@ -26,8 +28,13 @@ public class CommandConfig implements ConfigData
         @Comment("The error message used when the server is unavailable")
         public String unavailable = "The server is not yet ready - please wait. :warning:";
 
-        @Comment("The error message used when a user is denied permission to a command")
-        public String denied = "You don't have permission to do that! :no_good:";
+//        @Comment("The error message used when a user is denied permission to a command\n" +
+//                "Use ${role} for the required role name")
+//        public String denied = "You don't have permission to do that! :no_good:";
+
+//        @Comment("The error message used when a user must wait before executing a command\n" +
+//                "Use ${cooldown[:format]} for the remaining duration")
+//        public String cooldown = "Please wait another ${cooldown} before doing that! :alarm_clock:";
     }
 
     @Category("Built-in Commands")
@@ -64,6 +71,8 @@ public class CommandConfig implements ConfigData
                 name = "tps";
                 aliases = new String[]{"ticks"};
                 help = "Shows the server's current ticks per second";
+                cooldown = 10;
+                cooldownScope = Command.CooldownScope.CHANNEL;
             }
         }
     }
@@ -80,6 +89,7 @@ public class CommandConfig implements ConfigData
             aliases = new String[]{"wl"};
             help = "Manages the whitelist for the server";
             usage = "<list/add/remove> [username]";
+            role = "Admin";
             enabled = false; // example custom commands should not be enabled by default
         }
 
@@ -113,5 +123,14 @@ public class CommandConfig implements ConfigData
 
         @Comment("True if the command should be hidden from help messages")
         public boolean hidden = false;
+
+        @Comment("If defined, restricts access to Discord users with the given role identifier or name")
+        public @Nullable String role = null;
+
+        @Comment("The number of seconds a user must wait before using the command again")
+        public int cooldown = 0;
+
+        @Comment("To whom the cooldown applies (see https://git.io/JtpsJ)")
+        public Command.CooldownScope cooldownScope = Command.CooldownScope.USER;
     }
 }
