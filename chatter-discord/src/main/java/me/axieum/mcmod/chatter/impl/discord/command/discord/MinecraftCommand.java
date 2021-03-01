@@ -3,7 +3,7 @@ package me.axieum.mcmod.chatter.impl.discord.command.discord;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import me.axieum.mcmod.chatter.api.event.discord.MinecraftCommandCallback;
+import me.axieum.mcmod.chatter.api.event.discord.MinecraftCommandEvents;
 import me.axieum.mcmod.chatter.impl.discord.command.DiscordCommands;
 import me.axieum.mcmod.chatter.impl.discord.util.ServerUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -57,7 +57,7 @@ public class MinecraftCommand implements BiConsumer<Command, CommandEvent>
             final String mcCommand = formatMinecraftCommand(this.command, event.getArgs().split("\\s"));
 
             // Fire a proxying event to let listeners cancel the command execution
-            if (!MinecraftCommandCallback.BEFORE_EXECUTE.invoker().beforeExecute(mcCommand, command, event)) return;
+            if (!MinecraftCommandEvents.BEFORE_EXECUTE.invoker().beforeExecute(mcCommand, command, event)) return;
             LOGGER.info("@{} is proxying the command: '{}' -> '/{}'", event.getAuthor().getAsTag(),
                     event.getMessage().getContentRaw(), mcCommand);
 
@@ -107,7 +107,7 @@ public class MinecraftCommand implements BiConsumer<Command, CommandEvent>
                 .setDescription(result);
 
         // Fire a post-proxy event to let listeners intercept the result
-        if ((embed = MinecraftCommandCallback.AFTER_EXECUTE.invoker().afterExecute(
+        if ((embed = MinecraftCommandEvents.AFTER_EXECUTE.invoker().afterExecute(
                 event, command, mcCommand, result, success, embed)) == null)
             return;
 

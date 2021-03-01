@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.CommandBuilder;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.axieum.mcmod.chatter.api.event.discord.BuildCommandClientCallback;
+import me.axieum.mcmod.chatter.api.event.discord.JDAEvents;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordCommandListener;
 import me.axieum.mcmod.chatter.impl.discord.command.discord.MinecraftCommand;
 import me.axieum.mcmod.chatter.impl.discord.command.discord.TPSCommand;
@@ -76,7 +76,7 @@ public final class DiscordCommands
                   .forEach(builder::addCommand);
 
             // Build the client
-            BuildCommandClientCallback.EVENT.invoker().onBuild(builder);
+            JDAEvents.BUILD_COMMAND_CLIENT.invoker().onBuildCommandClient(builder);
             return builder.build();
         } catch (Exception e) {
             LOGGER.warn("Unable to prepare the command client: {}", e.getMessage());

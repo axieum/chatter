@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import org.jetbrains.annotations.Nullable;
 
-public final class MinecraftCommandCallback
+public final class MinecraftCommandEvents
 {
     /**
      * Called before executing a Minecraft command through Discord.

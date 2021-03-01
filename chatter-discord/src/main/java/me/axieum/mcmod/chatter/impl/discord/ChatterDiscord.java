@@ -2,7 +2,7 @@ package me.axieum.mcmod.chatter.impl.discord;
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
-import me.axieum.mcmod.chatter.api.event.discord.BuildJDACallback;
+import me.axieum.mcmod.chatter.api.event.discord.JDAEvents;
 import me.axieum.mcmod.chatter.api.event.player.PlayerEvents;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordLifecycleListener;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.MessageReactionListener;
@@ -56,7 +56,7 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
                 builder.addEventListeners(commands);
 
             // Build and login to the client
-            BuildJDACallback.EVENT.invoker().onBuild(builder);
+            JDAEvents.BUILD_CLIENT.invoker().onBuildClient(builder);
             LOGGER.info("Logging into Discord...");
             client = builder.build();
         } catch (LoginException | IllegalArgumentException e) {
