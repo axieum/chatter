@@ -9,11 +9,14 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.ServerSt
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.ServerStopped;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.ServerStopping;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.crash.CrashReport;
 
 import java.awt.*;
+import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.LOGGER;
@@ -55,7 +58,7 @@ public class ServerLifecycleCallback implements ServerStarting, ServerStarted, S
     }
 
     @Override
-    public void onServerStopping(MinecraftServer minecraftServer)
+    public void onServerStopping(MinecraftServer server)
     {
         // Send Discord notifications
         ChatterDiscord.getClient().ifPresent(jda -> {
@@ -68,16 +71,35 @@ public class ServerLifecycleCallback implements ServerStarting, ServerStarted, S
     }
 
     @Override
-    public void onServerStopped(MinecraftServer minecraftServer)
+    public void onServerStopped(MinecraftServer server)
     {
         // Send Discord notifications
         ChatterDiscord.getClient().ifPresent(jda -> {
             // Update the Discord bot status
             jda.getPresence().setStatus(CONFIG.bot.status.stopped);
-            // Dispatch a message to all configured channels
-            DiscordDispatcher.embed((embed, entry) -> embed.setColor(Color.RED)
-                                                           .setDescription(FORMATTER.apply(entry.discord.stopped)),
-                    (entry) -> entry.discord.stopped != null);
+            // Determine whether the server the stopped unexpectedly
+            // NB: Update to Java 9's `Optional#ifPresentOrElse` when Java 8 support is dropped
+            if (!ServerUtils.getCrashReport().isPresent()) {
+                // Dispatch a normal shutdown message to all configured channels
+                DiscordDispatcher.embed((embed, entry) -> embed.setColor(Color.RED)
+                                                               .setDescription(FORMATTER.apply(entry.discord.stopped)),
+                        (entry) -> entry.discord.stopped != null);
+            } else {
+                // Fetch the crash report file
+                final Optional<File> file = ServerUtils.getCrashReportFile();
+                // Add any additional message formats
+                FORMATTER.tokenize("reason", ServerUtils.getCrashReport().map(CrashReport::getMessage).orElse(""));
+                // Dispatch an unexpected shutdown message to all configured channels
+                DiscordDispatcher.embed((embed, entry) -> embed.setColor(Color.RED)
+                                                               .setDescription(FORMATTER.apply(entry.discord.crashed)),
+                        (action, entry) -> {
+                            // Attempt to attach the crash report
+                            if (entry.discord.uploadCrashReport && file.isPresent())
+                                action = action.addFile(file.get());
+                            action.queue();
+                        },
+                        (entry) -> entry.discord.crashed != null);
+            }
             // Shutdown the JDA client
             LOGGER.info("Wrapping up...");
             jda.shutdown();

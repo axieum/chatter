@@ -1,15 +1,20 @@
 package me.axieum.mcmod.chatter.impl.discord.util;
 
+import me.axieum.mcmod.chatter.mixin.discord.CrashReportAccessor;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.crash.CrashReport;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.Optional;
 import java.util.stream.LongStream;
 
 public final class ServerUtils
 {
     // Captured Minecraft server instance
-    public static @Nullable MinecraftServer INSTANCE;
+    public static @Nullable MinecraftServer INSTANCE = null;
+    // Captured Minecraft server crash report
+    public static @Nullable CrashReport CRASH_REPORT = null;
 
     /**
      * Returns the captured Minecraft server instance.
@@ -53,5 +58,31 @@ public final class ServerUtils
     {
         // Average the last tick lengths, and convert from nanoseconds to milliseconds
         return LongStream.of(server.lastTickLengths).average().orElse(0) * 1e-6d;
+    }
+
+    /**
+     * Returns the captured Minecraft server crash report.
+     *
+     * @return latest Minecraft server crash report if captured
+     */
+    public static Optional<CrashReport> getCrashReport()
+    {
+        return Optional.ofNullable(CRASH_REPORT);
+    }
+
+    /**
+     * Returns the captured Minecraft server crash report file.
+     *
+     * @return latest Minecraft server crash report file if captured and valid
+     */
+    public static Optional<File> getCrashReportFile()
+    {
+        try {
+            return getCrashReport().map(CrashReportAccessor.class::cast)
+                                   .map(CrashReportAccessor::getFile)
+                                   .filter(File::exists);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 }

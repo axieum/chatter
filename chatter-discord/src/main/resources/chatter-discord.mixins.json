@@ -4,7 +4,10 @@
   "package": "me.axieum.mcmod.chatter.mixin.discord",
   "compatibilityLevel": "JAVA_8",
   "mixins": [],
-  "server": [],
+  "server": [
+    "CrashReportAccessor",
+    "MinecraftServerMixin"
+  ],
   "client": [],
   "injectors": {
     "defaultRequire": 1
