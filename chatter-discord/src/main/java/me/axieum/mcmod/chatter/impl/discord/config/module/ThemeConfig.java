@@ -3,7 +3,9 @@ package me.axieum.mcmod.chatter.impl.discord.config.module;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
 import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
+import me.sargunvohra.mcmods.autoconfig1u.annotation.ConfigEntry.Category;
 import me.sargunvohra.mcmods.autoconfig1u.shadowed.blue.endless.jankson.Comment;
+import net.dv8tion.jda.api.entities.Activity.ActivityType;
 import org.jetbrains.annotations.Nullable;
 
 @Config(name = "theme")
@@ -15,6 +17,34 @@ public class ThemeConfig implements ConfigData
 
     @Comment("True if emojis should be treated as unicode - useful if your players' client supports emojis")
     public boolean useUnicodeEmojis = false;
+
+    @Category("Presences")
+    @Comment("Bot presences relayed periodically")
+    public Presence presence = new Presence();
+
+    public static class Presence
+    {
+        @Comment("The number of seconds between presence updates")
+        public int interval = 60;
+
+        @Comment("True if the presences should be randomly selected")
+        public boolean random = false;
+
+        @Comment("Presences")
+        public PresenceEntry[] entries = {new PresenceEntry()};
+
+        public static class PresenceEntry
+        {
+            @Comment("The type of presence (see https://git.io/Jqkez)")
+            public ActivityType type = ActivityType.DEFAULT;
+
+            @Comment("The text value that is put on display")
+            public String value = "Minecraft";
+
+            @Comment("If defined, sets the URL of the underlying media, e.g. Twitch stream")
+            public @Nullable String url = null;
+        }
+    }
 
     /**
      * Returns a Minecraft avatar URL for the given player's name.

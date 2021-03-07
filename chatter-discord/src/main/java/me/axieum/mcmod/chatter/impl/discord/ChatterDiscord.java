@@ -5,10 +5,7 @@ import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
 import me.axieum.mcmod.chatter.api.event.discord.JDAEvents;
 import me.axieum.mcmod.chatter.api.event.discord.MinecraftCommandEvents;
 import me.axieum.mcmod.chatter.api.event.player.PlayerEvents;
-import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordCommandListener;
-import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordLifecycleListener;
-import me.axieum.mcmod.chatter.impl.discord.callback.discord.MessageReactionListener;
-import me.axieum.mcmod.chatter.impl.discord.callback.discord.MessageUpdateListener;
+import me.axieum.mcmod.chatter.impl.discord.callback.discord.*;
 import me.axieum.mcmod.chatter.impl.discord.callback.minecraft.*;
 import me.axieum.mcmod.chatter.impl.discord.command.DiscordCommands;
 import me.axieum.mcmod.chatter.impl.discord.config.DiscordConfig;
@@ -45,7 +42,10 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
                                                  // Update the bot status
                                                  .setStatus(CONFIG.bot.status.starting)
                                                  // Register listeners
-                                                 .addEventListeners(new DiscordLifecycleListener());
+                                                 .addEventListeners(
+                                                         new DiscordLifecycleListener(),
+                                                         new DiscordPresenceListener()
+                                                 );
 
             // Conditionally enable member caching
             if (CONFIG.bot.cacheMembers)
