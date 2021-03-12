@@ -2,6 +2,7 @@ package me.axieum.mcmod.chatter.impl.discord.callback.minecraft;
 
 import me.axieum.mcmod.chatter.api.event.player.PlayerEvents;
 import me.axieum.mcmod.chatter.impl.discord.ChatterDiscord;
+import me.axieum.mcmod.chatter.impl.discord.config.module.MessageConfig.DimensionPredicate;
 import me.axieum.mcmod.chatter.impl.discord.util.DiscordDispatcher;
 import me.axieum.mcmod.chatter.impl.discord.util.StringUtils;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
@@ -38,11 +39,13 @@ public class PlayerDeathCallback implements PlayerEvents.Death
                     )) // lazy elapsed
                     .tokenize("score", String.valueOf(player.getScore()))
                     .tokenize("exp", String.valueOf(player.experienceLevel));
+
             // Dispatch a message to all configured channels
             DiscordDispatcher.embed((embed, entry) -> embed.setColor(Color.RED)
                                                            .setDescription(formatter.apply(entry.discord.death))
                                                            .setThumbnail(CONFIG.theme.getAvatarUrl(playerName, 16)),
-                    (entry) -> entry.discord.death != null);
+                    (entry) -> entry.discord.death != null,
+                    new DimensionPredicate(StringUtils.getWorldId(player.world)));
         });
     }
 }

@@ -1,6 +1,7 @@
 package me.axieum.mcmod.chatter.impl.discord.callback.minecraft;
 
 import me.axieum.mcmod.chatter.impl.discord.ChatterDiscord;
+import me.axieum.mcmod.chatter.impl.discord.config.module.MessageConfig.DimensionPredicate;
 import me.axieum.mcmod.chatter.impl.discord.util.DiscordDispatcher;
 import me.axieum.mcmod.chatter.impl.discord.util.StringUtils;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
@@ -21,9 +22,11 @@ public class PlayerChangeWorldCallback implements ServerEntityWorldChangeEvents.
                     .tokenize("player", player.getDisplayName().getString())
                     .tokenize("origin", StringUtils.getWorldName(origin))
                     .tokenize("destination", StringUtils.getWorldName(destination));
+
             // Dispatch a message to all configured channels
             DiscordDispatcher.dispatch((message, entry) -> message.append(formatter.apply(entry.discord.teleport)),
-                    (entry) -> entry.discord.teleport != null);
+                    (entry) -> entry.discord.teleport != null,
+                    new DimensionPredicate(StringUtils.getWorldId(destination)));
         });
     }
 }

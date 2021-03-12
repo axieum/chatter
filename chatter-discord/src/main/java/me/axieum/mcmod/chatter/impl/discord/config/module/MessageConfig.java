@@ -19,7 +19,8 @@ public class MessageConfig implements ConfigData
         @Comment("Identifier for a channel within Discord to observe")
         public long id;
 
-        @Comment("If defined, reduces the scope of all events to the listed Minecraft dimension IDs (empty for all)")
+        @Comment("If non-empty, reduces the scope of all events to the listed Minecraft " +
+                "dimension IDs (e.g. 'minecraft:nether')")
         public String[] dimensions = {};
 
         @Category("Discord")
@@ -132,7 +133,8 @@ public class MessageConfig implements ConfigData
         @Override
         public boolean test(MessageEntry entry)
         {
-            return entry.dimensions != null
+            return dimension != null
+                    && entry.dimensions != null
                     && entry.dimensions.length > 0
                     && Arrays.asList(entry.dimensions).contains(dimension);
         }

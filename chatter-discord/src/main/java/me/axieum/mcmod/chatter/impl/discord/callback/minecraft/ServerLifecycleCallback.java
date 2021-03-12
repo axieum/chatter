@@ -77,7 +77,7 @@ public class ServerLifecycleCallback implements ServerStarting, ServerStarted, S
         ChatterDiscord.getClient().ifPresent(jda -> {
             // Update the Discord bot status
             jda.getPresence().setStatus(CONFIG.bot.status.stopped);
-            // Determine whether the server the stopped unexpectedly
+            // Determine whether the server stopped unexpectedly
             // NB: Update to Java 9's `Optional#ifPresentOrElse` when Java 8 support is dropped
             if (!ServerUtils.getCrashReport().isPresent()) {
                 // Dispatch a normal shutdown message to all configured channels
@@ -94,8 +94,8 @@ public class ServerLifecycleCallback implements ServerStarting, ServerStarted, S
                                                                .setDescription(FORMATTER.apply(entry.discord.crashed)),
                         (action, entry) -> {
                             // Attempt to attach the crash report
-                            if (entry.discord.uploadCrashReport && file.isPresent())
-                                action = action.addFile(file.get());
+                            if (entry.discord.uploadCrashReport)
+                                file.ifPresent(action::addFile);
                             action.queue();
                         },
                         (entry) -> entry.discord.crashed != null);
