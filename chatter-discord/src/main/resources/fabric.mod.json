@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "chatter-styling",
+  "id": "chatter-discord",
   "version": "${version}",
-  "name": "Chatter Styling",
-  "description": "Add-on for Chatter to change how players see each other's messages",
+  "name": "Chatter Discord",
+  "description": "Add-on for Chatter to bring your Minecraft world into your Discord guild",
   "authors": [
     "Axieum"
   ],
@@ -16,12 +16,15 @@
   "icon": "logo.png",
   "environment": "server",
   "entrypoints": {
+    "preLaunch": [
+      "me.axieum.mcmod.chatter.impl.discord.ChatterDiscord"
+    ],
     "server": [
-      "me.axieum.mcmod.chatter.impl.styling.ChatterStyling"
+      "me.axieum.mcmod.chatter.impl.discord.ChatterDiscord"
     ]
   },
   "mixins": [
-    "chatter-styling.mixins.json"
+    "chatter-discord.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.7.4",

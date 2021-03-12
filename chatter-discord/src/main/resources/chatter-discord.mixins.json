@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.axieum.mcmod.chatter.mixin.discord",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [],
+  "server": [
+    "CrashReportAccessor",
+    "MinecraftServerMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

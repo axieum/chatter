@@ -1,0 +1,54 @@
+// Group any shaded dependencies together
+apply plugin: 'com.github.johnrengelman.shadow'
+configurations { shade; compile.extendsFrom shade }
+
+dependencies {
+    implementation project(':chatter-api')
+    shade "net.dv8tion:JDA:${JDA_VERSION}"
+    shade "com.jagrosh:jda-utilities:${JDA_UTILS_VERSION}"
+    shade "org.apache.logging.log4j:log4j-slf4j18-impl:${LOG4J_VERSION}"
+    shade "com.vdurmont:emoji-java:${EMOJI_JAVA_VERSION}"
+    shade "io.github.java-diff-utils:java-diff-utils:${JAVA_DIFF_UTILS_VERSION}"
+}
+
+// Produce a fat-jar with all the required dependencies
+shadowJar {
+    configurations = [project.configurations.shade]
+
+    // Filter dependencies
+    dependencies {
+        // Exclude log4j - we'll use version already included in Minecraft
+        exclude(dependency { it.moduleGroup == 'org.apache.logging.log4j' })
+    }
+
+    // Relocate dependencies
+    final dest = "${project.group}.shadow.discord"
+    relocate 'club.minnced.opus', "${dest}.club.minnced.opus"
+    relocate 'com.fasterxml.jackson', "${dest}.com.fasterxml.jackson"
+    relocate 'com.github.difflib', "${dest}.com.github.difflib"
+    relocate 'com.iwebpp.crypto', "${dest}.com.iwebpp.crypto"
+    relocate 'com.jagrosh.jdautilities', "${dest}.com.jagrosh.jdautilities"
+    relocate 'com.neovisionaries.ws', "${dest}.com.neovisionaries.ws"
+    relocate 'com.sun.jna', "${dest}.com.sun.jna"
+    relocate 'com.vdurmont.emoji', "${dest}.com.vdurmont.emoji"
+    relocate 'gnu.trove', "${dest}.gnu.trove"
+    relocate 'javax.annotation', "${dest}.javax.annotation"
+    relocate 'net.dv8tion.jda', "${dest}.net.dv8tion.jda"
+    relocate 'okhttp3', "${dest}.okhttp3"
+    relocate 'okio', "${dest}.okio"
+    relocate 'org.apache.commons.collections4', "${dest}.org.apache.commons.collections4"
+    relocate 'org.apache.logging.slf4j', "${dest}.org.apache.logging.slf4j"
+    relocate 'org.intellij.lang', "${dest}.org.intellij.lang"
+    relocate 'org.jetbrains.annotations', "${dest}.org.jetbrains.annotations"
+    relocate 'org.json', "${dest}.org.json"
+    relocate 'org.slf4j', "${dest}.slf4j"
+    relocate 'tomp2p', "${dest}.tomp2p"
+
+    // Minify the result - remove unused classes
+    minimize()
+}
+
+// We need to ensure the shadowing takes place after remapping
+artifacts {
+    archives tasks.shadowJar
+}

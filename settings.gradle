@@ -2,10 +2,7 @@ pluginManagement {
     repositories {
         jcenter()
         mavenCentral()
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
+        maven { name 'Fabric'; url 'https://maven.fabricmc.net/' }
         gradlePluginPortal()
     }
 }
@@ -15,3 +12,4 @@ rootProject.name = 'chatter'
 include 'chatter-api'
 include 'chatter-styling'
 include 'chatter-world'
+include 'chatter-discord'

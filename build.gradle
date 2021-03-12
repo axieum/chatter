@@ -1,14 +1,15 @@
 buildscript {
     dependencies {
-        classpath group: 'org.kohsuke', name: 'github-api', version: '1.122'
+        classpath group: 'org.kohsuke', name: 'github-api', version: '1.123'
     }
 }
 
 plugins {
     id 'java'
     id 'idea'
-    id 'fabric-loom' version '0.5-SNAPSHOT'
+    id 'fabric-loom' version '0.6-SNAPSHOT'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 import org.kohsuke.github.GHReleaseBuilder
@@ -28,14 +29,15 @@ allprojects {
         mappings "net.fabricmc:yarn:${YARN_MAPPINGS}:v2"
         modImplementation "net.fabricmc:fabric-loader:${FABRIC_LOADER_VERSION}"
 
-        modRuntime("io.github.prospector:modmenu:${MOD_MENU_VERSION}") {
-            transitive false
-        }
+        modRuntime "com.terraformersmc:modmenu:${MOD_MENU_VERSION}"
 
         modImplementation "net.fabricmc.fabric-api:fabric-api:${FABRIC_API_VERSION}"
-        modImplementation "me.sargunvohra.mcmods:autoconfig1u:${AUTOCONFIG_VERSION}"
+        modImplementation("me.shedaniel.cloth:cloth-config-fabric:${CLOTH_CONFIG_VERSION}") {
+            exclude group: 'net.fabricmc.fabric-api'
+        }
 
-        implementation "org.jetbrains:annotations:${JETBRAINS_ANNOTATIONS_VERSION}"
+        implementation "org.apache.commons:commons-lang3:${COMMONS_LANG3_VERSION}"
+        compileOnly "org.jetbrains:annotations:${JETBRAINS_ANNOTATIONS_VERSION}"
 
         testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
         testImplementation "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
@@ -121,6 +123,15 @@ allprojects {
         options {
             forgeGradleIntegration = false
         }
+    }
+
+    // Add additional Gradle repositories
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { name 'Fabric'; url 'https://maven.fabricmc.net/' }
+        maven { name 'Shedaniel'; url 'https://maven.shedaniel.me/' }
+        maven { name 'TerraformersMC'; url 'https://maven.terraformersmc.com/' }
     }
 }
 

@@ -1,3 +1,5 @@
 dependencies {
-    //
+    include("me.shedaniel.cloth:cloth-config-fabric:${CLOTH_CONFIG_VERSION}") {
+        exclude group: 'net.fabricmc.fabric-api'
+    }
 }

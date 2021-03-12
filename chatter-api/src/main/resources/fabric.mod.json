@@ -24,7 +24,11 @@
     "minecraft": ">=1.16"
   },
   "custom": {
-    "modmenu:parent": "chatter",
-    "modmenu:api": true
+    "modmenu": {
+      "parent": "chatter",
+      "badges": [
+        "library"
+      ]
+    }
   }
 }
