@@ -30,6 +30,8 @@
     "chatter-api": "*"
   },
   "custom": {
-    "modmenu:parent": "chatter"
+    "modmenu": {
+      "parent": "chatter"
+    }
   }
 }
