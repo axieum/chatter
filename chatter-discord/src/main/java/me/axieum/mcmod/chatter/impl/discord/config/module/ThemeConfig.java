@@ -24,7 +24,7 @@ public class ThemeConfig implements ConfigData
 
     public static class Presence
     {
-        @Comment("The number of seconds between presence updates")
+        @Comment("The number of seconds between presence updates (must be >=15)")
         public int interval = 60;
 
         @Comment("True if the presences should be randomly selected")
