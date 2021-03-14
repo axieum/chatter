@@ -17,7 +17,7 @@ shadowJar {
 
     // Filter dependencies
     dependencies {
-        // Exclude log4j - we'll use version already included in Minecraft
+        // Exclude log4j - we'll use the version already included with Minecraft
         exclude(dependency { it.moduleGroup == 'org.apache.logging.log4j' })
     }
 
@@ -46,9 +46,13 @@ shadowJar {
 
     // Minify the result - remove unused classes
     minimize()
+
+    // Add the licence to the distribution
+    from rootProject.file('LICENCE.txt')
 }
 
-// We need to ensure the shadowing takes place after remapping
-artifacts {
-    archives tasks.shadowJar
+// Provide the fat-jar to the remapping task
+remapJar {
+    dependsOn tasks.shadowJar
+    input.set(tasks.shadowJar.archiveFile)
 }

@@ -98,10 +98,7 @@ allprojects {
     // Nest any sub-projects in the distribution
     dependencies {
         afterEvaluate {
-            subprojects.each {
-                compile project(":${it.name}")
-                include project("${it.name}:")
-            }
+            subprojects.each { include project("${it.name}:") }
         }
     }
 
@@ -112,6 +109,7 @@ allprojects {
 
         archiveClassifier.set('sources')
         from sourceSets.main.allSource
+        from rootProject.file('LICENCE.txt')
     }
 
     // Publish to the CurseForge platform
