@@ -112,6 +112,7 @@ allprojects {
 
         archiveClassifier.set('sources')
         from sourceSets.main.allSource
+        from rootProject.file('LICENCE.txt')
     }
 
     // Publish to the CurseForge platform

@@ -46,9 +46,12 @@ shadowJar {
 
     // Minify the result - remove unused classes
     minimize()
+
+    // Add the licence to the distribution
+    from rootProject.file('LICENCE.txt')
 }
 
-// We need to ensure the shadowing takes place after remapping
+// Add the fat-jar as an artifact
 artifacts {
-    archives tasks.shadowJar
+    archives shadowJar
 }
