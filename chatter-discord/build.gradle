@@ -17,7 +17,7 @@ shadowJar {
 
     // Filter dependencies
     dependencies {
-        // Exclude log4j - we'll use version already included in Minecraft
+        // Exclude log4j - we'll use the version already included with Minecraft
         exclude(dependency { it.moduleGroup == 'org.apache.logging.log4j' })
     }
 
@@ -51,7 +51,8 @@ shadowJar {
     from rootProject.file('LICENCE.txt')
 }
 
-// Add the fat-jar as an artifact
-artifacts {
-    archives shadowJar
+// Provide the fat-jar to the remapping task
+remapJar {
+    dependsOn tasks.shadowJar
+    input.set(tasks.shadowJar.archiveFile)
 }
