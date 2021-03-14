@@ -89,6 +89,8 @@ public final class DiscordCommands
 
     /**
      * Replies to the invoker, notifying that the Minecraft server is unavailable.
+     *
+     * @param event JDA command event
      */
     public static void replyUnavailable(CommandEvent event)
     {
