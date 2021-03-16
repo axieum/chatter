@@ -5,6 +5,7 @@ import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
 import me.axieum.mcmod.chatter.api.event.discord.JDAEvents;
 import me.axieum.mcmod.chatter.api.event.discord.MinecraftCommandEvents;
 import me.axieum.mcmod.chatter.api.event.player.PlayerEvents;
+import me.axieum.mcmod.chatter.api.event.world.EntityDeathMessageCallback;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.*;
 import me.axieum.mcmod.chatter.impl.discord.callback.minecraft.*;
 import me.axieum.mcmod.chatter.impl.discord.command.DiscordCommands;
@@ -18,9 +19,11 @@ import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 import javax.security.auth.login.LoginException;
 import java.util.Optional;
@@ -29,15 +32,19 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
 {
     public static final Logger LOGGER = LogManager.getLogger("Chatter|Discord");
     public static final DiscordConfig CONFIG = DiscordConfig.init();
-    private static JDA client = null;
-    private static CommandClient commands = null;
+    private static @Nullable JDA client = null;
+    private static @Nullable CommandClient commands = null;
 
     @Override
     public void onPreLaunch()
     {
+        // Check if the module has been configured properly
+        if (CONFIG.bot.token == null || CONFIG.bot.token.isEmpty()) return;
+
+        LOGGER.info("Registered Chatter add-on 'Chatter Discord' - Bring your Minecraft world into your Discord guild");
+
         try {
             // Prepare the JDA client
-            LOGGER.info("Getting ready...");
             final JDABuilder builder = JDABuilder.createDefault(CONFIG.bot.token)
                                                  // Update the bot status
                                                  .setStatus(CONFIG.bot.status.starting)
@@ -69,6 +76,9 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
     @Override
     public void onInitializeServer()
     {
+        // Check if the module has been configured properly
+        if (client == null) return;
+
         // Register server lifecycle callbacks
         ServerLifecycleEvents.SERVER_STARTING.register(new ServerLifecycleCallback());
         ServerLifecycleEvents.SERVER_STARTED.register(new ServerLifecycleCallback());
@@ -81,6 +91,9 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(new PlayerChangeWorldCallback());
         PlayerEvents.DEATH.register(new PlayerDeathCallback());
         PlayerEvents.GRANT_CRITERION.register(new PlayerAdvancementCallback());
+        // Conditionally register module dependant callbacks
+        if (FabricLoader.getInstance().isModLoaded("chatter-world"))
+            EntityDeathMessageCallback.EVENT.register(new EntityDeathCallback());
         // Register Discord listeners
         getClient().ifPresent(jda -> jda.addEventListener(
 //                new MessageReceivedListener(), // NB: invoked via the command client (on non-commands)

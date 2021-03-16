@@ -50,12 +50,18 @@ allprojects {
     afterEvaluate {
         // Process resources
         processResources {
+            inputs.property 'id', project.MOD_ID
+            inputs.property 'name', project.findProperty('MOD_NAME') ?: project.name
             inputs.property 'version', project.version
 
-            // Inject versioning
+            // Expand mod metadata
             from(sourceSets.main.resources.srcDirs) {
                 include 'fabric.mod.json'
-                expand 'version': project.version
+                expand([
+                        'id'     : project.MOD_ID,
+                        'name'   : project.findProperty('MOD_NAME') ?: project.name,
+                        'version': project.version
+                ])
             }
 
             // Add sources
@@ -98,7 +104,10 @@ allprojects {
     // Nest any sub-projects in the distribution
     dependencies {
         afterEvaluate {
-            subprojects.each { include project("${it.name}:") }
+            subprojects.each {
+                implementation project(":${it.name}")
+                include project("${it.name}:")
+            }
         }
     }
 

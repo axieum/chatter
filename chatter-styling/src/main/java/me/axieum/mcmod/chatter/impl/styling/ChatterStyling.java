@@ -15,6 +15,8 @@ public class ChatterStyling implements DedicatedServerModInitializer
     @Override
     public void onInitializeServer()
     {
+        LOGGER.info("Registered Chatter add-on 'Chatter Styling' - Change how players see each other's messages");
+
         // Register listeners
         ChatEvents.RECEIVE_CHAT.register(new ReceiveChatCallback());
     }

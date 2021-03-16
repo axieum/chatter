@@ -10,25 +10,23 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 public class StylingConfig implements ConfigData
 {
     @Comment("Chat Styles")
-    public ChatStyle[] chat = {};
+    public ChatStyle[] chat = {new ChatStyle()};
 
     public static class ChatStyle
     {
-        @Comment("Author permission groups\n" +
-                "Allowed Values: 'player' or 'op'")
+        @Comment("Reduces the scope of messages to players belonging to the listed groups\n" +
+                "Allowed values: 'player' and 'operator'")
         public String[] groups = {};
 
-        @Comment("Author UUIDs\n" +
-                "Check out https://minecraftuuid.com/ (third party)")
+        @Comment("Reduces the scope of messages to players with the listed UUIDs (see https://minecraftuuid.com)")
         public String[] uuids = {};
 
-        @Comment("In-game chat message JSON template\n" +
-                "Check out https://minecraftjson.com/ (third party)\n" +
-                "Allowed Substitutions: ${player}, ${message}, ${group}, ${datetime|format}")
+        @Comment("The in-game chat message JSON template (see https://minecraftjson.com)\n" +
+                "Use ${player}, ${message}, ${group} and ${datetime[:format]}")
         public String template =
                 "[\"\",{\"text\":\"${player}\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/tell ${player} \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Click to direct message\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${message}\"}]";
 
-        @Comment("True if players can use colour codes, i.e. &[0-9a-fk-or]")
+        @Comment("True if players can use colour codes in their messages, i.e. &[0-9a-fk-or]")
         public boolean color = false;
     }
 

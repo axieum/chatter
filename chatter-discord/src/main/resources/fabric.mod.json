@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "chatter-discord",
+  "id": "${id}",
   "version": "${version}",
-  "name": "Chatter Discord",
+  "name": "${name}",
   "description": "Add-on for Chatter to bring your Minecraft world into your Discord guild",
   "authors": [
     "Axieum"
