@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "chatter-api",
+  "id": "${id}",
   "version": "${version}",
-  "name": "Chatter API",
+  "name": "${name}",
   "description": "Exposes an API to Chatter",
   "authors": [
     "Axieum"

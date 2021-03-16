@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "chatter-world",
+  "id": "${id}",
   "version": "${version}",
-  "name": "Chatter World",
+  "name": "${name}",
   "description": "Add-on for Chatter to add various chat mechanics to the world",
   "authors": [
     "Axieum"

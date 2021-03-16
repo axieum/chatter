@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "chatter",
+  "id": "${id}",
   "version": "${version}",
-  "name": "Chatter",
+  "name": "${name}",
   "description": "Take control of your server's chat",
   "authors": [
     "Axieum"

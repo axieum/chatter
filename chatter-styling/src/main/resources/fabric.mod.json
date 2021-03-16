@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "chatter-styling",
+  "id": "${id}",
   "version": "${version}",
-  "name": "Chatter Styling",
+  "name": "${name}",
   "description": "Add-on for Chatter to change how players see each other's messages",
   "authors": [
     "Axieum"
