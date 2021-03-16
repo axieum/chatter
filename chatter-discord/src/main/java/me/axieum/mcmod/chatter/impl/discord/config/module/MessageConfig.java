@@ -38,6 +38,10 @@ public class MessageConfig implements ConfigData
                     "${score}, ${exp}, ${lifespan[:format]} and ${datetime[:format]}")
             public String death = "**${player}** ${cause}!\n:skull: _${world} | ${x}, ${y}, ${z}_";
 
+            @Comment("A named animal/monster (with name tag) died (requires Chatter World game-rule)\n" +
+                    "Use ${name}, ${cause}, ${world}, ${x}, ${y}, ${z} and ${datetime[:format]}")
+            public String grief = "**${name}** ${cause}! :coffin:";
+
             @Comment("A player unlocked an advancement\n" +
                     "Use ${player}, ${type}, ${title}, ${description} and ${datetime[:format]}")
             public String advancement = "**${player}** completed the ${type} **${title}**! :clap:\n_${description}_";

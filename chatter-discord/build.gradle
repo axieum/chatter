@@ -4,6 +4,7 @@ configurations { shade; compile.extendsFrom shade }
 
 dependencies {
     implementation project(':chatter-api')
+    implementation project(':chatter-world')
     shade "net.dv8tion:JDA:${JDA_VERSION}"
     shade "com.jagrosh:jda-utilities:${JDA_UTILS_VERSION}"
     shade "org.apache.logging.log4j:log4j-slf4j18-impl:${LOG4J_VERSION}"

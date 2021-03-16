@@ -5,6 +5,7 @@ import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
 import me.axieum.mcmod.chatter.api.event.discord.JDAEvents;
 import me.axieum.mcmod.chatter.api.event.discord.MinecraftCommandEvents;
 import me.axieum.mcmod.chatter.api.event.player.PlayerEvents;
+import me.axieum.mcmod.chatter.api.event.world.EntityDeathMessageCallback;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.*;
 import me.axieum.mcmod.chatter.impl.discord.callback.minecraft.*;
 import me.axieum.mcmod.chatter.impl.discord.command.DiscordCommands;
@@ -18,6 +19,7 @@ import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -89,6 +91,9 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(new PlayerChangeWorldCallback());
         PlayerEvents.DEATH.register(new PlayerDeathCallback());
         PlayerEvents.GRANT_CRITERION.register(new PlayerAdvancementCallback());
+        // Conditionally register module dependant callbacks
+        if (FabricLoader.getInstance().isModLoaded("chatter-world"))
+            EntityDeathMessageCallback.EVENT.register(new EntityDeathCallback());
         // Register Discord listeners
         getClient().ifPresent(jda -> jda.addEventListener(
 //                new MessageReceivedListener(), // NB: invoked via the command client (on non-commands)
