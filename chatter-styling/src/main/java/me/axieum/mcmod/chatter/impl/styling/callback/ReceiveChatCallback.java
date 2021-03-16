@@ -40,7 +40,7 @@ public class ReceiveChatCallback implements ChatEvents.ReceiveChat
 
                           // Next, try to match against a group
                           // NB: At writing, there is no widely available permissions api
-                          return Arrays.asList(s.groups).contains(player.hasPermissionLevel(2) ? "op" : "player");
+                          return Arrays.asList(s.groups).contains(player.hasPermissionLevel(2) ? "operator" : "player");
                       })
                       .findFirst()
                       .orElse(null)
