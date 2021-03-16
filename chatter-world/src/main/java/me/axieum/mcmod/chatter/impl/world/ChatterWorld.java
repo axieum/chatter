@@ -12,6 +12,8 @@ public class ChatterWorld implements DedicatedServerModInitializer
     @Override
     public void onInitializeServer()
     {
+        LOGGER.info("Registered Chatter add-on 'Chatter World' - Add various chat mechanics to the world");
+
         // Register game rules
         WorldGameRules.init();
     }

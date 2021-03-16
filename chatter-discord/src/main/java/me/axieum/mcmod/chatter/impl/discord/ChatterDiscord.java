@@ -39,6 +39,8 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
         // Check if the module has been configured properly
         if (CONFIG.bot.token == null || CONFIG.bot.token.isEmpty()) return;
 
+        LOGGER.info("Registered Chatter add-on 'Chatter Discord' - Bring your Minecraft world into your Discord guild");
+
         try {
             // Prepare the JDA client
             LOGGER.info("Getting ready...");
