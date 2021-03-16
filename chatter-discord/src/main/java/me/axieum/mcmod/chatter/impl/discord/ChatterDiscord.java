@@ -21,6 +21,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 import javax.security.auth.login.LoginException;
 import java.util.Optional;
@@ -29,12 +30,15 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
 {
     public static final Logger LOGGER = LogManager.getLogger("Chatter|Discord");
     public static final DiscordConfig CONFIG = DiscordConfig.init();
-    private static JDA client = null;
-    private static CommandClient commands = null;
+    private static @Nullable JDA client = null;
+    private static @Nullable CommandClient commands = null;
 
     @Override
     public void onPreLaunch()
     {
+        // Check if the module has been configured properly
+        if (CONFIG.bot.token == null || CONFIG.bot.token.isEmpty()) return;
+
         try {
             // Prepare the JDA client
             LOGGER.info("Getting ready...");
@@ -69,6 +73,9 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
     @Override
     public void onInitializeServer()
     {
+        // Check if the module has been configured properly
+        if (client == null) return;
+
         // Register server lifecycle callbacks
         ServerLifecycleEvents.SERVER_STARTING.register(new ServerLifecycleCallback());
         ServerLifecycleEvents.SERVER_STARTED.register(new ServerLifecycleCallback());
