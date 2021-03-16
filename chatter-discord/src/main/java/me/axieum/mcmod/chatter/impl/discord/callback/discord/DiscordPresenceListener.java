@@ -29,9 +29,12 @@ public class DiscordPresenceListener extends ListenerAdapter
         if (timer != null) timer.cancel();
         timer = new Timer("Chatter-Discord-Presence-Timer", true);
 
+        // Check how long the update interval should be, and apply reasonable bounds
+        final long interval = Math.max(CONFIG.theme.presence.interval, 15);
+
         // Schedule the presence update task
-        LOGGER.info("Scheduling bot presence updates for every {} second(s)", CONFIG.theme.presence.interval);
-        timer.schedule(new PresenceUpdateTask(event.getJDA()), 0, CONFIG.theme.presence.interval * 1000L);
+        LOGGER.info("Scheduling bot presence updates for every {} second(s)", interval);
+        timer.schedule(new PresenceUpdateTask(event.getJDA()), 0, interval * 1000L);
     }
 
     @Override

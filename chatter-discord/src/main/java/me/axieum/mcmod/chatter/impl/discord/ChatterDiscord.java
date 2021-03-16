@@ -43,7 +43,6 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
 
         try {
             // Prepare the JDA client
-            LOGGER.info("Getting ready...");
             final JDABuilder builder = JDABuilder.createDefault(CONFIG.bot.token)
                                                  // Update the bot status
                                                  .setStatus(CONFIG.bot.status.starting)
