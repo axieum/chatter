@@ -15,17 +15,7 @@
   "license": "MIT",
   "icon": "logo.png",
   "environment": "*",
-  "entrypoints": {
-    "server": [
-      "me.axieum.mcmod.chatter.Chatter"
-    ]
-  },
-  "mixins": [
-    "chatter.mixins.json"
-  ],
-  "depends": {
-    "fabricloader": ">=0.7.4",
-    "fabric": "*",
-    "minecraft": ">=1.16"
-  }
+  "entrypoints": {},
+  "mixins": [],
+  "depends": {}
 }
