@@ -98,7 +98,10 @@ allprojects {
     // Nest any sub-projects in the distribution
     dependencies {
         afterEvaluate {
-            subprojects.each { include project("${it.name}:") }
+            subprojects.each {
+                implementation project(":${it.name}")
+                include project("${it.name}:")
+            }
         }
     }
 
