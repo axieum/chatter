@@ -10,7 +10,7 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 public class StylingConfig implements ConfigData
 {
     @Comment("Chat Styles")
-    public ChatStyle[] chat = {};
+    public ChatStyle[] chat = {new ChatStyle()};
 
     public static class ChatStyle
     {
