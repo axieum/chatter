@@ -5,6 +5,9 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import net.minecraft.text.Text;
+
+import java.util.Arrays;
 
 @Config(name = "chatter/style")
 public class StylingConfig implements ConfigData
@@ -28,6 +31,18 @@ public class StylingConfig implements ConfigData
 
         @Comment("True if players can use colour codes in their messages, i.e. &[0-9a-fk-or]")
         public boolean color = false;
+    }
+
+    @Override
+    public void validatePostLoad() throws ValidationException
+    {
+        // Check the validity of any JSON message templates
+        try {
+            // Collect all JSON templates, and attempt to parse them as JSON into valid Minecraft text
+            Arrays.stream(chat).map(entry -> entry.template).forEach(Text.Serializer::fromJson);
+        } catch (Exception e) {
+            throw new ValidationException("Invalid text JSON template", e);
+        }
     }
 
     /**

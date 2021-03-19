@@ -4,9 +4,12 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Category;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import net.minecraft.text.Text;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @Config(name = "messages")
 public class MessageConfig implements ConfigData
@@ -108,6 +111,29 @@ public class MessageConfig implements ConfigData
             @Comment("A user sent a message that contained attachments\n" +
                     "Use ${author}, ${tag}, ${url}, ${name}, ${ext}, ${size} and ${datetime[:format]}")
             public String attachment = "[\"\",{\"text\":\"${author}\",\"color\":\"#00aaff\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"@${tag} \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Sent from Discord\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${name}\",\"color\":\"blue\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"${url}\"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":{\"text\":\"${ext} (${size})\"}}}]";
+        }
+    }
+
+    @Override
+    public void validatePostLoad() throws ValidationException
+    {
+        // Check the validity of any JSON message templates
+        try {
+            Arrays.stream(entries)
+                  // Collect all JSON templates from all entries
+                  .flatMap(entry -> Stream.of(
+                          entry.minecraft.chat,
+                          entry.minecraft.edit,
+                          entry.minecraft.react,
+                          entry.minecraft.unreact,
+                          entry.minecraft.attachment
+                  ))
+                  // Filter only defined messages
+                  .filter(Objects::nonNull)
+                  // Attempt to parse as JSON into valid Minecraft text
+                  .forEach(Text.Serializer::fromJson);
+        } catch (Exception e) {
+            throw new ValidationException("Invalid text JSON template", e);
         }
     }
 
