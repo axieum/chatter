@@ -160,9 +160,16 @@ curseforge {
             displayName = "${project.findProperty('MOD_NAME') ?: project.name} ${project.version} for Minecraft ${MINECRAFT_VERSION}"
         }
 
-        // Add additional artifacts (e.g. dev jars, etc.)
+        // Add additional main artifacts (e.g. dev jars, etc.)
         addArtifact file("${project.buildDir}/libs/${project.archivesBaseName}-${project.version}-dev.jar")
         addArtifact file("${project.buildDir}/libs/${project.archivesBaseName}-${project.version}-sources.jar")
+
+        // Add any additional sub-project artifacts
+        subprojects.each {
+            addArtifact file("${it.buildDir}/libs/${it.archivesBaseName}-${it.version}.jar")
+            addArtifact file("${it.buildDir}/libs/${it.archivesBaseName}-${it.version}-dev.jar")
+            addArtifact file("${it.buildDir}/libs/${it.archivesBaseName}-${it.version}-sources.jar")
+        }
 
         // Ensure remapping takes place before uploading
         afterEvaluate {
@@ -181,20 +188,27 @@ task github(dependsOn: remapJar) {
 
     doLast {
         // Connect to the GitHub repository using an OAuth access token (e.g. a personal access token)
-        def github = GitHub.connectUsingOAuth(System.getenv('GITHUB_API_KY') as String)
+        def github = GitHub.connectUsingOAuth(System.getenv('GITHUB_API_KEY') as String)
         def repository = github.getRepository(project.GITHUB_REPO as String)
 
-        // Build a new release
+        // Tag the latest commit, and hence prepare a new release
         def builder = new GHReleaseBuilder(repository, "v${project.version}")
         builder.name("${project.findProperty('MOD_NAME') ?: project.name} ${project.version} for Minecraft ${MINECRAFT_VERSION}")
         builder.body("For a list of changes, please refer to https://github.com/${project.GITHUB_REPO}/commits")
         builder.prerelease(project.version.endsWith('alpha') || project.version.endsWith('beta'))
         builder.commitish(project.GITHUB_BRANCH as String)
-
-        // Persist the release and upload all relevant artifacts
         def release = builder.create()
+
+        // Upload the main artifact (i.e. mod jar)
         release.uploadAsset(file("${project.buildDir}/libs/${project.archivesBaseName}-${project.version}.jar"), 'application/java-archive')
+        // Upload additional main artifacts (e.g. dev jars, etc.)
         release.uploadAsset(file("${project.buildDir}/libs/${project.archivesBaseName}-${project.version}-dev.jar"), 'application/java-archive')
         release.uploadAsset(file("${project.buildDir}/libs/${project.archivesBaseName}-${project.version}-sources.jar"), 'application/java-archive')
+        // Upload any additional sub-project artifacts
+        subprojects.each {
+            release.uploadAsset(file("${it.buildDir}/libs/${it.archivesBaseName}-${it.version}.jar"), 'application/java-archive')
+            release.uploadAsset(file("${it.buildDir}/libs/${it.archivesBaseName}-${it.version}-dev.jar"), 'application/java-archive')
+            release.uploadAsset(file("${it.buildDir}/libs/${it.archivesBaseName}-${it.version}-sources.jar"), 'application/java-archive')
+        }
     }
 }
