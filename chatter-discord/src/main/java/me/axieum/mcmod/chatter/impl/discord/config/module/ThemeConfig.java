@@ -8,6 +8,8 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import net.dv8tion.jda.api.entities.Activity.ActivityType;
 import org.jetbrains.annotations.Nullable;
 
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.LOGGER;
+
 @Config(name = "theme")
 public class ThemeConfig implements ConfigData
 {
@@ -43,6 +45,16 @@ public class ThemeConfig implements ConfigData
 
             @Comment("If defined, sets the URL of the underlying media, e.g. Twitch stream")
             public @Nullable String url = null;
+        }
+    }
+
+    @Override
+    public void validatePostLoad()
+    {
+        // Check that the interval is within reasonable bounds
+        if (presence.interval < 15) {
+            LOGGER.warn("A presence update interval shorter than 15 seconds will lead to rate-limits! Reverting to 15s");
+            presence.interval = 15;
         }
     }
 
