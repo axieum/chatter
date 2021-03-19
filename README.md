@@ -23,12 +23,9 @@ This Minecraft mod allows you take control of various aspects of your server's c
 you can stay connected with what's happening on your server.
 
 1. [Features](#features)
-    - [Discord](#people_holding_hands-discord)
-    - [Filtering](#innocent-filtering)
-    - [Named Animal/Monster Death Messages](#scream-named-animalmonster-death-messages)
-    - [Nicknames](#smile-nicknames)
-    - [Ranged Messages](#dart-ranged-messages) 
     - [Styling](#art-styling)
+    - [Named Animal/Monster Death Messages](#scream-named-animalmonster-death-messages)
+    - [Discord](#people_holding_hands-discord)
 2. [FAQ.](#faq)
 3. [Contributing](#contributing)
 4. [Security Vulnerabilities](#security-vulnerabilities)
@@ -36,32 +33,20 @@ you can stay connected with what's happening on your server.
 
 ## Features
 
-### :people_holding_hands: Discord
+### :art: Styling
 
-Bring your Minecraft world into your [Discord](https://discord.com) guild.
-
-### :innocent: Filtering
-
-Clean up your chat by filtering and/or replacing words or phrases.
+Change how players see each other's messages. We can all agree that the classic Minecraft chat format is quite
+lacklustre to the point where it becomes hard to read. Chatter allows you to tweak the chat format - go ahead and add
+colour!
 
 ### :scream: Named Animal/Monster Death Messages
 
 Name an animal or monster with a [Name Tag](https://minecraft.gamepedia.com/Name_Tag) to see their death message in the
 chat. Have closure knowing what happened to them.
 
-### :smile: Nicknames
+### :people_holding_hands: Discord
 
-Appear in the chat under an alias that's easier for others to remember, or to conceal your identity.
-
-### :dart: Ranged Messages
-
-Change how far a player's message can travel, i.e. cross-dimensionality and/or within 250 blocks.
-
-### :art: Styling
-
-Change how players see each other's messages. We can all agree that the classic Minecraft chat format is quite
-lacklustre to the point where it becomes hard to read. Chatter allows you to tweak the chat format - go ahead and add
-colour!
+Bring your Minecraft world into your [Discord](https://discord.com) guild.
 
 ## FAQ.
 

@@ -15,7 +15,3 @@ Add-on for [Chatter](..) to add various chat mechanics to the world.
 
 Name an animal or monster with a [Name Tag](https://minecraft.gamepedia.com/Name_Tag) to see their death message in the
 chat. Have closure knowing what happened to them.
-
-### :dart: Ranged Messages
-
-Change how far a player's message can travel, i.e. cross-dimensionality and/or within 250 blocks.
