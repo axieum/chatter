@@ -62,8 +62,7 @@ Thank you for considering contributing to Chatter! Please see the [Contribution 
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Chatter, please send an e-mail to Axieum via
-[imaxieum@gmail.com](mailto:imaxieum@gmail.com). All security vulnerabilities will be promptly addressed.
+Please review the [Security Policy](.github/SECURITY.md) on how to report security vulnerabilities.
 
 ## Licence
 
