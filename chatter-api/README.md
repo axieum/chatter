@@ -5,6 +5,6 @@
 </p>
 
 # Chatter API :books:
-> Exposes an API to [Chatter](..)
+> Exposes an API to [Chatter](..) for developers
 
 _Are you a developer? Create your own add-ons!_
