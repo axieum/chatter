@@ -19,51 +19,60 @@
 # Chatter
 > Take control of your server's chat
 
-This Minecraft mod allows you take control of various aspects of your server's chat. With many configurable features,
-you can stay connected with what's happening on your server.
+Chatter is a **Minecraft mod** that allows you to take control of various
+aspects of your server's chat. With many configurable features, you can stay
+connected with what's happening on your server.
 
-1. [Features](#features)
+It is a **server-side** only mod, built on the [Fabric][fabric] mod loader and
+is available for modern versions of [Minecraft][minecraft] Java-Edition.
+
+1. [Add-ons](#add-ons)
     - [Styling](#art-styling)
-    - [Named Animal/Monster Death Messages](#scream-named-animalmonster-death-messages)
+    - [World](#earth_africa-world)
     - [Discord](#people_holding_hands-discord)
-2. [FAQ.](#faq)
-3. [Contributing](#contributing)
-4. [Security Vulnerabilities](#security-vulnerabilities)
-5. [Licence](#licence)
+    - [API](#books-api)
+2. [Contributing](#contributing)
+3. [Security Vulnerabilities](#security-vulnerabilities)
+4. [Licence](#licence)
 
-## Features
+> :information_source: For further reading, please check out the [wiki][wiki]!
 
-### :art: Styling
+## Add-ons
 
-Change how players see each other's messages. We can all agree that the classic Minecraft chat format is quite
-lacklustre to the point where it becomes hard to read. Chatter allows you to tweak the chat format - go ahead and add
-colour!
+### [:art: Styling](chatter-styling)
 
-### :scream: Named Animal/Monster Death Messages
+Change how players see each other's messages.
 
-Name an animal or monster with a [Name Tag](https://minecraft.gamepedia.com/Name_Tag) to see their death message in the
-chat. Have closure knowing what happened to them.
+### [:earth_africa: World](chatter-world)
 
-### :people_holding_hands: Discord
+Add various chat mechanics to the world.
 
-Bring your Minecraft world into your [Discord](https://discord.com) guild.
+### [:people_holding_hands: Discord](chatter-discord)
 
-## FAQ.
+Bring your Minecraft world into your [Discord][discord] guild.
 
-A compiled list of frequently asked questions. :confused:
+### [:books: API](chatter-api)
 
-_There are no questions yet, please check back later._
-
-_Don't see your question? [Ask it here](https://github.com/Axieum/Chatter/issues)._
+Exposes an API to [Chatter][homepage] for developers.
 
 ## Contributing
 
-Thank you for considering contributing to Chatter! Please see the [Contribution Guidelines](.github/CONTRIBUTING.md).
+Thank you for considering contributing to Chatter! Please see the
+[Contribution Guidelines](.github/CONTRIBUTING.md).
 
 ## Security Vulnerabilities
 
-Please review the [Security Policy](.github/SECURITY.md) on how to report security vulnerabilities.
+Please review the [Security Policy](.github/SECURITY.md) on how to report
+security vulnerabilities.
 
 ## Licence
 
-Chatter is open-sourced software licenced under the [MIT licence](https://opensource.org/licenses/MIT).
+Chatter is open-sourced software licenced under the [MIT licence][licence].
+
+[homepage]: https://github.com/Axieum/Chatter
+[wiki]: https://axieum.gitbook.io/chatter-for-minecraft
+[licence]: https://opensource.org/licenses/MIT
+[fabric]: https://fabricmc.net
+[minecraft]: https://minecraft.net
+[minecraft:name_tag]: https://minecraft.gamepedia.com/Name_Tag
+[discord]: https://discord.com

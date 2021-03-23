@@ -3,7 +3,7 @@
   "id": "${id}",
   "version": "${version}",
   "name": "${name}",
-  "description": "Exposes an API to Chatter",
+  "description": "Exposes an API to Chatter for developers",
   "authors": [
     "Axieum"
   ],
