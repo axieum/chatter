@@ -4,6 +4,7 @@ import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
 import me.axieum.mcmod.chatter.api.styling.ChatStyleProvider;
 import me.axieum.mcmod.chatter.impl.styling.config.StylingConfig;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
+import me.axieum.mcmod.chatter.impl.util.StringUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -65,6 +66,7 @@ public class ReceiveChatCallback implements ChatEvents.ReceiveChat
                 .optional("team", provider.getTeamName(player))
                 .optional("prefix", provider.getPrefix(player))
                 .optional("suffix", provider.getSuffix(player))
+                .tokenize("world", () -> StringUtils.getWorldName(player.world)) // lazy world name
                 .datetime("datetime")
                 .regex(COLOR_CODE_PATTERN, m -> "\u00A7" + m.get(1)) // replace all colour codes up to this point
                 .tokenize("message", provider.getMessage(player, raw));
