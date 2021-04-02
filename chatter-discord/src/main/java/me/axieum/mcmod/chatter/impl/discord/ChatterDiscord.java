@@ -95,11 +95,15 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
         if (FabricLoader.getInstance().isModLoaded("chatter-world"))
             EntityDeathMessageCallback.EVENT.register(new EntityDeathCallback());
         // Register Discord listeners
-        getClient().ifPresent(jda -> jda.addEventListener(
-//                new MessageReceivedListener(), // NB: invoked via the command client (on non-commands)
-                new MessageUpdateListener(),
-                new MessageReactionListener()
-        ));
+        getClient().ifPresent(jda -> {
+            jda.addEventListener(
+                    new MessageUpdateListener(),
+                    new MessageReactionListener()
+            );
+            // NB: Received messages are handled by the command client (on non-commands)
+            //     Hence, if the command client was not setup, register here instead
+            if (commands == null) jda.addEventListener(new MessageReceivedListener());
+        });
         MinecraftCommandEvents.AFTER_EXECUTE.register(new DiscordCommandListener.PlayerSkinInjector());
     }
 
