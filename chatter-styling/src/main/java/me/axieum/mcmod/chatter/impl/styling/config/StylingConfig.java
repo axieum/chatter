@@ -18,14 +18,14 @@ public class StylingConfig implements ConfigData
     public static class ChatStyle
     {
         @Comment("Reduces the scope of messages to players belonging to the listed groups\n" +
-                "Allowed values: 'player' and 'operator'")
+                "Use 'player' and 'operator' if you do not have a permissions mod")
         public String[] groups = {};
 
         @Comment("Reduces the scope of messages to players with the listed UUIDs (see https://minecraftuuid.com)")
         public String[] uuids = {};
 
         @Comment("The in-game chat message JSON template (see https://minecraftjson.com)\n" +
-                "Use ${player}, ${message}, ${group} and ${datetime[:format]}")
+                "Use ${player}, ${message}, ${group}, ${team}, ${prefix}, ${suffix} and ${datetime[:format]}")
         public String template =
                 "[\"\",{\"text\":\"${player}\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/tell ${player} \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Click to direct message\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${message}\"}]";
 

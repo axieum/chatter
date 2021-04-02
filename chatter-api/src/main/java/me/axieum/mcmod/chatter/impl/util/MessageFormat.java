@@ -3,14 +3,13 @@ package me.axieum.mcmod.chatter.impl.util;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -154,6 +153,33 @@ public class MessageFormat
             return match.size() > 2 ? DurationFormatUtils.formatDuration(millis, match.get(2))
                                     : DurationFormatUtils.formatDurationWords(millis, true, true);
         });
+    }
+
+    /**
+     * Adds a new optional token replacement, with a default fallback value.
+     *
+     * @param token       token name to match
+     * @param replacement nullable plaintext replacement
+     * @return a reference to this object
+     * @see #optional(String, String, String)
+     */
+    public MessageFormat optional(String token, @Nullable String replacement)
+    {
+        return optional(token, replacement, "");
+    }
+
+    /**
+     * Adds a new optional token replacement, with a default fallback value.
+     *
+     * @param token       token name to match
+     * @param replacement nullable plaintext replacement
+     * @param fallback    not-null default fallback value
+     * @return a reference to this object
+     * @see Optional
+     */
+    public MessageFormat optional(String token, @Nullable String replacement, @NotNull String fallback)
+    {
+        return tokenize(token, Optional.ofNullable(replacement).orElse(fallback));
     }
 
     /**
