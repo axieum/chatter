@@ -23,7 +23,7 @@ public class MessageConfig implements ConfigData
         public long id;
 
         @Comment("If non-empty, reduces the scope of all events to the listed Minecraft " +
-                "dimension IDs (e.g. 'minecraft:nether')")
+                "dimension IDs (e.g. 'minecraft:the_nether')")
         public String[] dimensions = {};
 
         @Category("Discord")
