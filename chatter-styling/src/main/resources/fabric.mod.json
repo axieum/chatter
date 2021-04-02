@@ -29,6 +29,9 @@
     "minecraft": ">=1.16",
     "chatter-api": "*"
   },
+  "suggests": {
+    "luckperms": ">=5"
+  },
   "custom": {
     "modmenu": {
       "parent": "chatter"

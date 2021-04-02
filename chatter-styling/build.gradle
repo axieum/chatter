@@ -1,3 +1,4 @@
 dependencies {
     implementation project(':chatter-api')
+    modImplementation "net.luckperms:api:${LUCKPERMS_VERSION}"
 }

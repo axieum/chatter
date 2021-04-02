@@ -3,6 +3,7 @@ package me.axieum.mcmod.chatter.impl.discord.util;
 import me.axieum.mcmod.chatter.impl.discord.config.DiscordConfig;
 import me.axieum.mcmod.chatter.impl.discord.config.module.MessageConfig;
 import me.axieum.mcmod.chatter.impl.discord.config.module.MessageConfig.MessageEntry;
+import me.axieum.mcmod.chatter.impl.util.StringUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
