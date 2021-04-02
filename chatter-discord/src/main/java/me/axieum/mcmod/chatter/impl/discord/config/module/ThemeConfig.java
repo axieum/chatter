@@ -13,7 +13,7 @@ import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.LOGGER;
 @Config(name = "theme")
 public class ThemeConfig implements ConfigData
 {
-    @Comment("Template URL for retrieving Minecraft avatars, i.e. for used in embeds\n" +
+    @Comment("Template URL for retrieving Minecraft avatars, i.e. for use in embeds\n" +
             "Use ${username} for the player's name, and ${size} for the height in pixels")
     public @Nullable String avatarUrl = "https://minotar.net/helm/${username}/${size}";
 
