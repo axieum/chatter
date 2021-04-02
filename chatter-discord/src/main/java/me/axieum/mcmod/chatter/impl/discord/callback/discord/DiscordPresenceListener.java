@@ -25,6 +25,9 @@ public class DiscordPresenceListener extends ListenerAdapter
     @Override
     public void onReady(@NotNull ReadyEvent event)
     {
+        // Skip presence scheduling if there are none configured yet
+        if (CONFIG.theme.presence.entries.length == 0) return;
+
         // Prepare a new timer that we can schedule tasks on
         if (timer != null) timer.cancel();
         timer = new Timer("Chatter-Discord-Presence-Timer", true);
@@ -41,7 +44,8 @@ public class DiscordPresenceListener extends ListenerAdapter
     public void onShutdown(@NotNull ShutdownEvent event)
     {
         // Clear the timer
-        if (timer != null) timer.cancel();
+        if (timer == null) return;
+        timer.cancel();
         timer = null;
 
         // Reset the presence
