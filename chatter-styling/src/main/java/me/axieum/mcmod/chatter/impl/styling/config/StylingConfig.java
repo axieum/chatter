@@ -1,11 +1,15 @@
 package me.axieum.mcmod.chatter.impl.styling.config;
 
+import me.axieum.mcmod.chatter.impl.styling.callback.ReceiveChatCallback;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 
 import java.util.Arrays;
 
@@ -46,13 +50,39 @@ public class StylingConfig implements ConfigData
     }
 
     /**
+     * Handles a reload of the configuration instance.
+     *
+     * @param holder registered config holder
+     * @param config updated config instance
+     * @return reload action result
+     * @see ConfigHolder#load()
+     */
+    public static ActionResult reload(ConfigHolder<StylingConfig> holder, StylingConfig config)
+    {
+        // Clear all cached player chat styles
+        ReceiveChatCallback.PLAYER_CACHE.clear();
+
+        return ActionResult.PASS;
+    }
+
+    /**
      * Registers and prepares a new configuration instance.
      *
      * @return registered config holder
+     * @see AutoConfig#register
      */
-    public static StylingConfig init()
+    public static ConfigHolder<StylingConfig> init()
     {
-        return AutoConfig.register(StylingConfig.class, JanksonConfigSerializer::new)
-                         .getConfig();
+        // Register the config
+        ConfigHolder<StylingConfig> holder = AutoConfig.register(StylingConfig.class, JanksonConfigSerializer::new);
+
+        // Listen for when the server is reloading (i.e. /reload), and reload the config
+        ServerLifecycleEvents.START_DATA_PACK_RELOAD.register((s, m) ->
+                AutoConfig.getConfigHolder(StylingConfig.class).load());
+
+        // Listen for when the config gets loaded
+        holder.registerLoadListener(StylingConfig::reload);
+
+        return holder;
     }
 }
