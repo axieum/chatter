@@ -9,12 +9,13 @@ import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordCommandListe
 import me.axieum.mcmod.chatter.impl.discord.command.discord.MinecraftCommand;
 import me.axieum.mcmod.chatter.impl.discord.command.discord.TPSCommand;
 import me.axieum.mcmod.chatter.impl.discord.command.discord.UptimeCommand;
+import me.axieum.mcmod.chatter.impl.discord.config.DiscordConfig;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.Arrays;
 
-import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.LOGGER;
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.getConfig;
 
 public final class DiscordCommands
 {
@@ -23,20 +24,20 @@ public final class DiscordCommands
      *
      * @return JDA command client instance
      */
-    public static CommandClient build()
+    public static CommandClient build(DiscordConfig config)
     {
         try {
             final CommandClientBuilder builder = new CommandClientBuilder();
 
             // General command configurations
-            builder.setPrefix(CONFIG.commands.prefix)
-                   .setHelpWord(CONFIG.commands.helpWord)
-                   .useHelpBuilder(CONFIG.commands.helpWord != null)
-                   .setStatus(CONFIG.bot.status.starting)
+            builder.setPrefix(config.commands.prefix)
+                   .setHelpWord(config.commands.helpWord)
+                   .useHelpBuilder(config.commands.helpWord != null)
+                   .setStatus(config.bot.status.starting)
                    .setActivity(null);
 
             // Conditionally apply owner identifiers
-            final String[] ownerIds = CONFIG.commands.admins;
+            final String[] ownerIds = config.commands.admins;
             if (ownerIds.length > 0) {
                 // Assume the first identifier is the primary owner
                 builder.setOwnerId(ownerIds[0]);
@@ -51,19 +52,19 @@ public final class DiscordCommands
             builder.setListener(new DiscordCommandListener());
 
             // Conditionally add built-in commands
-            if (CONFIG.commands.builtin.uptime.enabled)
-                builder.addCommand(new UptimeCommand());
+            if (config.commands.builtin.uptime.enabled)
+                builder.addCommand(new UptimeCommand(config.commands.builtin.uptime));
 
-            if (CONFIG.commands.builtin.tps.enabled)
-                builder.addCommand(new TPSCommand());
+            if (config.commands.builtin.tps.enabled)
+                builder.addCommand(new TPSCommand(config.commands.builtin.tps));
 
             // Add any custom commands
-            Arrays.stream(CONFIG.commands.custom)
+            Arrays.stream(config.commands.custom)
                   // Filter out disabled commands
                   .filter(c -> c.enabled)
                   // Build the commands
                   .map(c -> {
-                      LOGGER.debug("Registering custom command: '{}{}' -> '{}'", CONFIG.commands.prefix, c.name, c.command);
+                      LOGGER.debug("Registering custom command: '{}{}' -> '{}'", config.commands.prefix, c.name, c.command);
                       return new CommandBuilder()
                               .setName(c.name)
                               .setAliases(c.aliases)
@@ -94,6 +95,8 @@ public final class DiscordCommands
      */
     public static void replyUnavailable(CommandEvent event)
     {
-        event.reply(new EmbedBuilder().setColor(0xff8800).setDescription(CONFIG.commands.messages.unavailable).build());
+        event.reply(new EmbedBuilder().setColor(0xff8800)
+                                      .setDescription(getConfig().commands.messages.unavailable)
+                                      .build());
     }
 }

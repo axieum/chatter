@@ -10,6 +10,7 @@ import me.axieum.mcmod.chatter.impl.discord.callback.discord.*;
 import me.axieum.mcmod.chatter.impl.discord.callback.minecraft.*;
 import me.axieum.mcmod.chatter.impl.discord.command.DiscordCommands;
 import me.axieum.mcmod.chatter.impl.discord.config.DiscordConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -31,23 +32,23 @@ import java.util.Optional;
 public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchEntrypoint
 {
     public static final Logger LOGGER = LogManager.getLogger("Chatter|Discord");
-    public static final DiscordConfig CONFIG = DiscordConfig.init();
-    private static @Nullable JDA client = null;
-    private static @Nullable CommandClient commands = null;
+    public static final ConfigHolder<DiscordConfig> CONFIG = DiscordConfig.init();
+    public static @Nullable JDA client = null;
+    public static @Nullable CommandClient commands = null;
 
     @Override
     public void onPreLaunch()
     {
         // Check if the module has been configured properly
-        if (CONFIG.bot.token == null || CONFIG.bot.token.isEmpty()) return;
+        if (getConfig().bot.token == null || getConfig().bot.token.isEmpty()) return;
 
         LOGGER.info("Registered Chatter add-on 'Chatter Discord' - Bring your Minecraft world into your Discord guild");
 
         try {
             // Prepare the JDA client
-            final JDABuilder builder = JDABuilder.createDefault(CONFIG.bot.token)
+            final JDABuilder builder = JDABuilder.createDefault(getConfig().bot.token)
                                                  // Update the bot status
-                                                 .setStatus(CONFIG.bot.status.starting)
+                                                 .setStatus(getConfig().bot.status.starting)
                                                  // Register listeners
                                                  .addEventListeners(
                                                          new DiscordLifecycleListener(),
@@ -55,20 +56,22 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
                                                  );
 
             // Conditionally enable member caching
-            if (CONFIG.bot.cacheMembers)
+            if (getConfig().bot.cacheMembers)
                 builder.enableIntents(GatewayIntent.GUILD_MEMBERS) // enable required intents
                        .setMemberCachePolicy(MemberCachePolicy.ALL) // cache all members
                        .setChunkingFilter(ChunkingFilter.ALL); // eager-load all members
 
             // Conditionally prepare and build the command client
-            if ((commands = DiscordCommands.build()) != null)
-                builder.addEventListeners(commands);
+            if (getConfig().commands.enabled)
+                if ((commands = DiscordCommands.build(getConfig())) != null)
+                    builder.addEventListeners(commands);
 
             // Build and login to the client
             JDAEvents.BUILD_CLIENT.invoker().onBuildClient(builder);
             LOGGER.info("Logging into Discord...");
             client = builder.build();
         } catch (LoginException | IllegalArgumentException e) {
+            if (commands != null) { commands.shutdown(); commands = null; }
             LOGGER.error("Unable to login to Discord: {}", e.getMessage());
         }
     }
@@ -95,12 +98,27 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
         if (FabricLoader.getInstance().isModLoaded("chatter-world"))
             EntityDeathMessageCallback.EVENT.register(new EntityDeathCallback());
         // Register Discord listeners
-        getClient().ifPresent(jda -> jda.addEventListener(
-//                new MessageReceivedListener(), // NB: invoked via the command client (on non-commands)
-                new MessageUpdateListener(),
-                new MessageReactionListener()
-        ));
+        getClient().ifPresent(jda -> {
+            jda.addEventListener(
+                    new MessageUpdateListener(),
+                    new MessageReactionListener()
+            );
+            // NB: Received messages are handled by the command client (on non-commands)
+            //     Hence, if the command client was not setup, register here instead
+            if (commands == null) jda.addEventListener(new MessageReceivedListener());
+        });
         MinecraftCommandEvents.AFTER_EXECUTE.register(new DiscordCommandListener.PlayerSkinInjector());
+    }
+
+    /**
+     * Returns the config instance.
+     *
+     * @return config instance
+     * @see ConfigHolder#getConfig()
+     */
+    public static DiscordConfig getConfig()
+    {
+        return CONFIG.getConfig();
     }
 
     /**

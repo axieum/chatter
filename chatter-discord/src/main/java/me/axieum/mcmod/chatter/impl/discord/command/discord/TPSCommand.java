@@ -12,8 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.util.Optional;
 
-import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
-
 /**
  * Command to show the Minecraft server's current ticks per second.
  */
@@ -22,17 +20,16 @@ public class TPSCommand extends Command
     /**
      * Constructs a new TPS command consumer.
      */
-    public TPSCommand()
+    public TPSCommand(CommandConfig.Builtin.TPS config)
     {
-        final CommandConfig.Builtin.TPS cfg = CONFIG.commands.builtin.tps;
-        this.name = cfg.name;
-        this.aliases = cfg.aliases;
-        this.arguments = cfg.usage;
-        this.help = cfg.help;
-        this.hidden = cfg.hidden;
-        this.requiredRole = cfg.role;
-        this.cooldown = cfg.cooldown;
-        this.cooldownScope = Optional.ofNullable(cfg.cooldownScope).orElse(CooldownScope.USER);
+        this.name = config.name;
+        this.aliases = config.aliases;
+        this.arguments = config.usage;
+        this.help = config.help;
+        this.hidden = config.hidden;
+        this.requiredRole = config.role;
+        this.cooldown = config.cooldown;
+        this.cooldownScope = Optional.ofNullable(config.cooldownScope).orElse(CooldownScope.USER);
     }
 
     @Override

@@ -1,8 +1,10 @@
 package me.axieum.mcmod.chatter.impl.styling.callback;
 
 import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
+import me.axieum.mcmod.chatter.api.styling.ChatStyleProvider;
 import me.axieum.mcmod.chatter.impl.styling.config.StylingConfig;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
+import me.axieum.mcmod.chatter.impl.util.StringUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -12,8 +14,8 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import static me.axieum.mcmod.chatter.impl.styling.ChatterStyling.CONFIG;
 import static me.axieum.mcmod.chatter.impl.styling.ChatterStyling.LOGGER;
+import static me.axieum.mcmod.chatter.impl.styling.ChatterStyling.getConfig;
 
 /**
  * Tweaks server received messages with configured formats.
@@ -28,19 +30,25 @@ public class ReceiveChatCallback implements ChatEvents.ReceiveChat
     public Text onReceiveMessage(ServerPlayerEntity player, String raw, Text text)
     {
         // Are there any styles configured?
-        if (CONFIG.chat.length < 1) return text;
+        if (getConfig().chat.length < 1 || player == null) return text;
+
+        // Fetch the registered chat style provider
+        final ChatStyleProvider provider = ChatStyleProvider.getProvider();
+        if (provider == null) return text;
+
+        // Find the player's group
+        final String group = provider.getGroup(player);
 
         // Determine the message style for the player
         final StylingConfig.ChatStyle style = PLAYER_CACHE.computeIfAbsent(player.getUuid(), uuid ->
-                Arrays.stream(CONFIG.chat)
+                Arrays.stream(getConfig().chat)
                       .filter(s -> {
                           // First, try to match the player's UUID
                           if (Arrays.asList(s.uuids).contains(uuid.toString()))
                               return true;
 
                           // Next, try to match against a group
-                          // NB: At writing, there is no widely available permissions api
-                          return Arrays.asList(s.groups).contains(player.hasPermissionLevel(2) ? "operator" : "player");
+                          return Arrays.asList(s.groups).contains(group);
                       })
                       .findFirst()
                       .orElse(null)
@@ -48,14 +56,20 @@ public class ReceiveChatCallback implements ChatEvents.ReceiveChat
         if (style == null) return text;
 
         // Apply styling rules
-        if (style.color)
+        if (style.color && provider.canUseColor(player))
             raw = COLOR_CODE_PATTERN.matcher(raw).replaceAll("\u00A7$1");
 
         // Define a message formatter
         final MessageFormat formatter = new MessageFormat()
-                .tokenize("player", player.getDisplayName().getString())
-                .tokenize("message", raw)
-                .datetime("datetime");
+                .tokenize("player", provider.getPlayerName(player))
+                .tokenize("group", provider.getGroupName(player))
+                .optional("team", provider.getTeamName(player))
+                .optional("prefix", provider.getPrefix(player))
+                .optional("suffix", provider.getSuffix(player))
+                .tokenize("world", () -> StringUtils.getWorldName(player.world)) // lazy world name
+                .datetime("datetime")
+                .regex(COLOR_CODE_PATTERN, m -> "\u00A7" + m.get(1)) // replace all colour codes up to this point
+                .tokenize("message", provider.getMessage(player, raw));
 
         // Parse the JSON template into a Text component ready for dispatching
         try {

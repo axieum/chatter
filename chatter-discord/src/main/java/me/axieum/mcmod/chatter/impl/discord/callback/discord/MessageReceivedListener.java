@@ -1,8 +1,9 @@
 package me.axieum.mcmod.chatter.impl.discord.callback.discord;
 
+import me.axieum.mcmod.chatter.impl.discord.util.FormatUtils;
 import me.axieum.mcmod.chatter.impl.discord.util.MinecraftDispatcher;
-import me.axieum.mcmod.chatter.impl.discord.util.StringUtils;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
+import me.axieum.mcmod.chatter.impl.util.StringUtils;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -30,7 +31,7 @@ public class MessageReceivedListener extends ListenerAdapter
                     .datetime("datetime")
                     .tokenize("author", author)
                     .tokenize("tag", tag)
-                    .tokenize("message", StringUtils.discordToMinecraft(event.getMessage().getContentDisplay()));
+                    .tokenize("message", FormatUtils.discordToMinecraft(event.getMessage().getContentDisplay()));
             // Dispatch a message to all players
             MinecraftDispatcher.json((entry) -> formatter.apply(entry.minecraft.chat),
                     (entry) -> entry.minecraft.chat != null);

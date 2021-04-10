@@ -2,8 +2,8 @@ package me.axieum.mcmod.chatter.impl.discord.callback.discord;
 
 import com.github.difflib.text.DiffRow;
 import com.github.difflib.text.DiffRowGenerator;
+import me.axieum.mcmod.chatter.impl.discord.util.FormatUtils;
 import me.axieum.mcmod.chatter.impl.discord.util.MinecraftDispatcher;
-import me.axieum.mcmod.chatter.impl.discord.util.StringUtils;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;
@@ -49,9 +49,9 @@ public class MessageUpdateListener extends ListenerAdapter
                         .tokenize("author", event.getMember() != null ? event.getMember().getEffectiveName()
                                                                       : event.getAuthor().getName())
                         .tokenize("tag", event.getAuthor().getAsTag())
-                        .tokenize("original", () -> StringUtils.discordToMinecraft(original)) // lazy original
-                        .tokenize("message", StringUtils.discordToMinecraft(message))
-                        .tokenize("diff", StringUtils.discordToMinecraft(diff.get(0).getOldLine()));
+                        .tokenize("original", () -> FormatUtils.discordToMinecraft(original)) // lazy original
+                        .tokenize("message", FormatUtils.discordToMinecraft(message))
+                        .tokenize("diff", FormatUtils.discordToMinecraft(diff.get(0).getOldLine()));
                 // Dispatch a message to all players
                 MinecraftDispatcher.json((entry) -> formatter.apply(entry.minecraft.edit),
                         (entry) -> entry.minecraft.edit != null);

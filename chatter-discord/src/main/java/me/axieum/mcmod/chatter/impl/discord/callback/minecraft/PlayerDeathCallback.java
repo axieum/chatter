@@ -4,8 +4,8 @@ import me.axieum.mcmod.chatter.api.event.player.PlayerEvents;
 import me.axieum.mcmod.chatter.impl.discord.ChatterDiscord;
 import me.axieum.mcmod.chatter.impl.discord.config.module.MessageConfig.DimensionPredicate;
 import me.axieum.mcmod.chatter.impl.discord.util.DiscordDispatcher;
-import me.axieum.mcmod.chatter.impl.discord.util.StringUtils;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
+import me.axieum.mcmod.chatter.impl.util.StringUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -14,7 +14,7 @@ import net.minecraft.stat.Stats;
 import java.awt.*;
 import java.time.Duration;
 
-import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.getConfig;
 
 public class PlayerDeathCallback implements PlayerEvents.Death
 {
@@ -43,7 +43,7 @@ public class PlayerDeathCallback implements PlayerEvents.Death
             // Dispatch a message to all configured channels
             DiscordDispatcher.embed((embed, entry) -> embed.setColor(Color.RED)
                                                            .setDescription(formatter.apply(entry.discord.death))
-                                                           .setThumbnail(CONFIG.theme.getAvatarUrl(playerName, 16)),
+                                                           .setThumbnail(getConfig().theme.getAvatarUrl(playerName, 16)),
                     (entry) -> entry.discord.death != null,
                     new DimensionPredicate(StringUtils.getWorldId(player.world)));
         });

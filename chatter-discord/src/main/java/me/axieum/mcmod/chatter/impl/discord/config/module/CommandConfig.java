@@ -1,15 +1,25 @@
 package me.axieum.mcmod.chatter.impl.discord.config.module;
 
 import com.jagrosh.jdautilities.command.Command;
+import com.jagrosh.jdautilities.command.CommandClient;
+import me.axieum.mcmod.chatter.impl.discord.ChatterDiscord;
+import me.axieum.mcmod.chatter.impl.discord.callback.discord.MessageReceivedListener;
+import me.axieum.mcmod.chatter.impl.discord.command.DiscordCommands;
+import me.axieum.mcmod.chatter.impl.discord.config.DiscordConfig;
 import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Category;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import net.minecraft.util.ActionResult;
 import org.jetbrains.annotations.Nullable;
 
 @Config(name = "commands")
 public class CommandConfig implements ConfigData
 {
+    @Comment("True if any commands should be available for use")
+    public boolean enabled = true;
+
     @Comment("Message prefix used in Discord to trigger commands")
     public String prefix = "!";
 
@@ -132,5 +142,51 @@ public class CommandConfig implements ConfigData
 
         @Comment("To whom the cooldown applies (see https://git.io/JtpsJ)")
         public Command.CooldownScope cooldownScope = Command.CooldownScope.USER;
+    }
+
+    /**
+     * Handles a reload of the configuration instance.
+     *
+     * @param holder registered config holder
+     * @param config updated config instance
+     * @return reload action result
+     * @see ConfigHolder#load()
+     */
+    public static ActionResult reload(ConfigHolder<DiscordConfig> holder, DiscordConfig config)
+    {
+        return ChatterDiscord.getClient().map(jda -> {
+            // Build a new JDA command client, and validate it
+            final @Nullable CommandClient commands = config.commands.enabled ? DiscordCommands.build(config) : null;
+
+            // If commands are enabled, and the command client failed to build, fail
+            if (config.commands.enabled && commands == null)
+                return ActionResult.FAIL;
+
+            // Shutdown the current JDA command client, if present
+            ChatterDiscord.getCommandClient().ifPresent(client -> {
+                jda.removeEventListener(client);
+                client.shutdown();
+            });
+
+            // Set the new command client
+            ChatterDiscord.commands = commands;
+
+            // Register the command listener, and re-route received messages through the client if present
+            if (commands != null) {
+                jda.addEventListener(commands);
+                // Remove any separate message received listeners, if present
+                // NB: Received messages are handled by the command client (on non-commands)
+                jda.getRegisteredListeners()
+                   .stream()
+                   .filter(l -> l instanceof MessageReceivedListener)
+                   .forEach(jda::removeEventListener);
+            } else {
+                // Ensure there is only one separate message received listener
+                if (jda.getRegisteredListeners().stream().noneMatch(l -> l instanceof MessageReceivedListener))
+                    jda.addEventListener(new MessageReceivedListener());
+            }
+
+            return ActionResult.PASS;
+        }).orElse(ActionResult.PASS);
     }
 }

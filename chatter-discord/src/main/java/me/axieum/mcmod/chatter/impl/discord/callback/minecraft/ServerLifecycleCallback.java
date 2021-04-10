@@ -18,8 +18,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.LOGGER;
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.getConfig;
 
 public class ServerLifecycleCallback implements ServerStarting, ServerStarted, ServerStopping, ServerStopped
 {
@@ -36,7 +36,7 @@ public class ServerLifecycleCallback implements ServerStarting, ServerStarted, S
         // Send Discord notifications
         ChatterDiscord.getClient().ifPresent(jda -> {
             // Update the Discord bot status
-            jda.getPresence().setStatus(CONFIG.bot.status.starting);
+            jda.getPresence().setStatus(getConfig().bot.status.starting);
             // Dispatch a message to all configured channels
             DiscordDispatcher.embed((embed, entry) -> embed.setDescription(FORMATTER.apply(entry.discord.starting)),
                     (entry) -> entry.discord.starting != null);
@@ -49,7 +49,7 @@ public class ServerLifecycleCallback implements ServerStarting, ServerStarted, S
         // Send Discord notifications
         ChatterDiscord.getClient().ifPresent(jda -> {
             // Update the Discord bot status
-            jda.getPresence().setStatus(CONFIG.bot.status.started);
+            jda.getPresence().setStatus(getConfig().bot.status.started);
             // Dispatch a message to all configured channels
             DiscordDispatcher.embed((embed, entry) -> embed.setColor(Color.GREEN)
                                                            .setDescription(FORMATTER.apply(entry.discord.started)),
@@ -63,7 +63,7 @@ public class ServerLifecycleCallback implements ServerStarting, ServerStarted, S
         // Send Discord notifications
         ChatterDiscord.getClient().ifPresent(jda -> {
             // Update the Discord bot status
-            jda.getPresence().setStatus(CONFIG.bot.status.stopping);
+            jda.getPresence().setStatus(getConfig().bot.status.stopping);
             // Dispatch a message to all configured channels
             DiscordDispatcher.embed((embed, entry) -> embed.setDescription(FORMATTER.apply(entry.discord.stopping)),
                     (entry) -> entry.discord.stopping != null);
@@ -76,7 +76,7 @@ public class ServerLifecycleCallback implements ServerStarting, ServerStarted, S
         // Send Discord notifications
         ChatterDiscord.getClient().ifPresent(jda -> {
             // Update the Discord bot status
-            jda.getPresence().setStatus(CONFIG.bot.status.stopped);
+            jda.getPresence().setStatus(getConfig().bot.status.stopped);
             // Determine whether the server stopped unexpectedly
             // NB: Update to Java 9's `Optional#ifPresentOrElse` when Java 8 support is dropped
             if (!ServerUtils.getCrashReport().isPresent()) {

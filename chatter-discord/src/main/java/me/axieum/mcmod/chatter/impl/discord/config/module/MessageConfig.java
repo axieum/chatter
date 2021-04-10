@@ -23,7 +23,7 @@ public class MessageConfig implements ConfigData
         public long id;
 
         @Comment("If non-empty, reduces the scope of all events to the listed Minecraft " +
-                "dimension IDs (e.g. 'minecraft:nether')")
+                "dimension IDs (e.g. 'minecraft:the_nether')")
         public String[] dimensions = {};
 
         @Category("Discord")
@@ -163,10 +163,9 @@ public class MessageConfig implements ConfigData
         @Override
         public boolean test(MessageEntry entry)
         {
-            return dimension != null
-                    && entry.dimensions != null
-                    && entry.dimensions.length > 0
-                    && Arrays.asList(entry.dimensions).contains(dimension);
+            if (dimension == null || entry.dimensions == null || entry.dimensions.length == 0)
+                return true; // true if the entry doesn't have dimension filters configured
+            return Arrays.asList(entry.dimensions).contains(dimension);
         }
     }
 }
