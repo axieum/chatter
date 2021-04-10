@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.entities.IMentionable;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.getConfig;
 
 public final class FormatUtils
 {
@@ -100,6 +100,6 @@ public final class FormatUtils
         // Apply the initial translation
         final String translation = D_TO_M_FORMAT.apply(message);
         // Conditionally apply emoji translations
-        return CONFIG.theme.useUnicodeEmojis ? translation : EmojiParser.parseToAliases(translation);
+        return getConfig().theme.useUnicodeEmojis ? translation : EmojiParser.parseToAliases(translation);
     }
 }

@@ -2,8 +2,8 @@ package me.axieum.mcmod.chatter.impl.discord.callback.discord;
 
 import com.github.difflib.text.DiffRow;
 import com.github.difflib.text.DiffRowGenerator;
-import me.axieum.mcmod.chatter.impl.discord.util.MinecraftDispatcher;
 import me.axieum.mcmod.chatter.impl.discord.util.FormatUtils;
+import me.axieum.mcmod.chatter.impl.discord.util.MinecraftDispatcher;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageDeleteEvent;

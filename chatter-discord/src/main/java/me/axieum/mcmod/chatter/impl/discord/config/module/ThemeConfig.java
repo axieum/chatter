@@ -1,11 +1,16 @@
 package me.axieum.mcmod.chatter.impl.discord.config.module;
 
+import me.axieum.mcmod.chatter.impl.discord.ChatterDiscord;
+import me.axieum.mcmod.chatter.impl.discord.callback.discord.DiscordPresenceListener;
+import me.axieum.mcmod.chatter.impl.discord.config.DiscordConfig;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
 import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Category;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import net.dv8tion.jda.api.entities.Activity.ActivityType;
+import net.minecraft.util.ActionResult;
 import org.jetbrains.annotations.Nullable;
 
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.LOGGER;
@@ -71,5 +76,24 @@ public class ThemeConfig implements ConfigData
         return new MessageFormat().tokenize("username", username)
                                   .tokenize("size", String.valueOf(size))
                                   .apply(this.avatarUrl);
+    }
+
+    /**
+     * Handles a reload of the configuration instance.
+     *
+     * @param holder registered config holder
+     * @param config updated config instance
+     * @return reload action result
+     * @see ConfigHolder#load()
+     */
+    public static ActionResult reload(ConfigHolder<DiscordConfig> holder, DiscordConfig config)
+    {
+        return ChatterDiscord.getClient().map(jda -> {
+            // Restart the Discord bot presence scheduler
+            DiscordPresenceListener.teardown(jda);
+            DiscordPresenceListener.setup(jda, config.theme.presence);
+
+            return ActionResult.PASS;
+        }).orElse(ActionResult.PASS);
     }
 }

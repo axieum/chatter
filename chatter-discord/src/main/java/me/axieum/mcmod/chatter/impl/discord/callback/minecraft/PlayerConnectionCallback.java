@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
-import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.getConfig;
 
 public class PlayerConnectionCallback implements Join, Disconnect
 {
@@ -41,7 +41,7 @@ public class PlayerConnectionCallback implements Join, Disconnect
 
             // Dispatch a message to all configured channels
             DiscordDispatcher.embed((embed, entry) -> embed.setDescription(formatter.apply(entry.discord.join))
-                                                           .setThumbnail(CONFIG.theme.getAvatarUrl(playerName, 16)),
+                                                           .setThumbnail(getConfig().theme.getAvatarUrl(playerName, 16)),
                     (entry) -> entry.discord.join != null,
                     new DimensionPredicate(StringUtils.getWorldId(handler.player.world)));
         });
@@ -62,7 +62,7 @@ public class PlayerConnectionCallback implements Join, Disconnect
 
             // Dispatch a message to all configured channels
             DiscordDispatcher.embed((embed, entry) -> embed.setDescription(formatter.apply(entry.discord.leave))
-                                                           .setThumbnail(CONFIG.theme.getAvatarUrl(playerName, 16)),
+                                                           .setThumbnail(getConfig().theme.getAvatarUrl(playerName, 16)),
                     (entry) -> entry.discord.leave != null,
                     new DimensionPredicate(StringUtils.getWorldId(handler.player.world)));
         });

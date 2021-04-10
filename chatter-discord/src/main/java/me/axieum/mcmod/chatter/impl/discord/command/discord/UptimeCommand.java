@@ -14,7 +14,7 @@ import java.lang.management.ManagementFactory;
 import java.time.Duration;
 import java.util.Optional;
 
-import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.getConfig;
 
 /**
  * Command to show how long the Minecraft server has been online for.
@@ -28,17 +28,16 @@ public class UptimeCommand extends Command
     /**
      * Constructs a new Uptime command consumer.
      */
-    public UptimeCommand()
+    public UptimeCommand(CommandConfig.Builtin.Uptime config)
     {
-        final CommandConfig.Builtin.Uptime cfg = CONFIG.commands.builtin.uptime;
-        this.name = cfg.name;
-        this.aliases = cfg.aliases;
-        this.arguments = cfg.usage;
-        this.help = cfg.help;
-        this.hidden = cfg.hidden;
-        this.requiredRole = cfg.role;
-        this.cooldown = cfg.cooldown;
-        this.cooldownScope = Optional.ofNullable(cfg.cooldownScope).orElse(CooldownScope.USER);
+        this.name = config.name;
+        this.aliases = config.aliases;
+        this.arguments = config.usage;
+        this.help = config.help;
+        this.hidden = config.hidden;
+        this.requiredRole = config.role;
+        this.cooldown = config.cooldown;
+        this.cooldownScope = Optional.ofNullable(config.cooldownScope).orElse(CooldownScope.USER);
     }
 
     @Override
@@ -50,7 +49,7 @@ public class UptimeCommand extends Command
 
         // If the server is present and ready, handle the command
         if (server != null)
-            event.reply(new EmbedBuilder().setDescription(FORMATTER.apply(CONFIG.commands.builtin.uptime.message))
+            event.reply(new EmbedBuilder().setDescription(FORMATTER.apply(getConfig().commands.builtin.uptime.message))
                                           .build());
         else
             DiscordCommands.replyUnavailable(event);

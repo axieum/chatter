@@ -9,8 +9,8 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.LOGGER;
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.getConfig;
 
 public class MessageReactionListener extends ListenerAdapter
 {
@@ -35,7 +35,7 @@ public class MessageReactionListener extends ListenerAdapter
                     .tokenize("author", context.getMember() != null ? context.getMember().getEffectiveName()
                                                                     : context.getAuthor().getName())
                     .tokenize("author_tag", context.getAuthor().getAsTag())
-                    .tokenize("emote", CONFIG.theme.useUnicodeEmojis ? emote : EmojiParser.parseToAliases(emote));
+                    .tokenize("emote", getConfig().theme.useUnicodeEmojis ? emote : EmojiParser.parseToAliases(emote));
 
             // Dispatch a message to all players
             MinecraftDispatcher.json(entry -> formatter.apply(added ? entry.minecraft.react : entry.minecraft.unreact),
