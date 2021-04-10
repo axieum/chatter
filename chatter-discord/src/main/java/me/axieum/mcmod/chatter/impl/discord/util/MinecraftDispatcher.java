@@ -15,8 +15,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.LOGGER;
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.getConfig;
 
 public final class MinecraftDispatcher
 {
@@ -53,7 +53,7 @@ public final class MinecraftDispatcher
     {
         ServerUtils.getInstance().filter(ServerUtils::isReady).ifPresent(server -> {
             // Prepare a stream of configured message entries
-            Stream<MessageEntry> stream = Arrays.stream(CONFIG.messages.entries).parallel();
+            Stream<MessageEntry> stream = Arrays.stream(getConfig().messages.entries).parallel();
             // Filter the stream
             if (predicates != null)
                 for (Predicate<MessageEntry> predicate : predicates)

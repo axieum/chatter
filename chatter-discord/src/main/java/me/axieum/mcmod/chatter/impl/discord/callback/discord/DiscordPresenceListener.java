@@ -17,8 +17,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.CONFIG;
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.LOGGER;
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.getConfig;
 
 public class DiscordPresenceListener extends ListenerAdapter
 {
@@ -70,23 +70,43 @@ public class DiscordPresenceListener extends ListenerAdapter
     @Override
     public void onReady(@NotNull ReadyEvent event)
     {
+        setup(event.getJDA(), getConfig().theme.presence);
+    }
+
+    @Override
+    public void onShutdown(@NotNull ShutdownEvent event)
+    {
+        teardown(event.getJDA());
+    }
+
+    /**
+     * Sets up the Discord bot presences.
+     *
+     * @param jda JDA client
+     */
+    public static void setup(@NotNull JDA jda, ThemeConfig.Presence config)
+    {
         // Skip presence scheduling if there are none configured yet
-        if (CONFIG.theme.presence.entries.length == 0) return;
+        if (config.entries.length == 0) return;
 
         // Prepare a new timer that we can schedule tasks on
         if (timer != null) timer.cancel();
         timer = new Timer("Chatter-Discord-Presence-Timer", true);
 
         // Check how long the update interval should be, and apply reasonable bounds
-        final long interval = Math.max(CONFIG.theme.presence.interval, 15);
+        final long interval = Math.max(config.interval, 15);
 
         // Schedule the presence update task
         LOGGER.info("Scheduling bot presence updates for every {} second(s)", interval);
-        timer.schedule(new PresenceUpdateTask(event.getJDA()), 0, interval * 1000L);
+        timer.schedule(new PresenceUpdateTask(jda), 0, interval * 1000L);
     }
 
-    @Override
-    public void onShutdown(@NotNull ShutdownEvent event)
+    /**
+     * Tears down the Discord bot presences.
+     *
+     * @param jda JDA client
+     */
+    public static void teardown(@NotNull JDA jda)
     {
         // Clear the timer
         if (timer == null) return;
@@ -94,7 +114,7 @@ public class DiscordPresenceListener extends ListenerAdapter
         timer = null;
 
         // Reset the presence
-        event.getJDA().getPresence().setActivity(null);
+        jda.getPresence().setActivity(null);
     }
 
     /**
@@ -115,17 +135,17 @@ public class DiscordPresenceListener extends ListenerAdapter
         {
             try {
                 // Attempt to create a new activity from the configured presence entry and set it
-                final ThemeConfig.Presence.PresenceEntry cfg = CONFIG.theme.presence.entries[next];
+                final ThemeConfig.Presence.PresenceEntry cfg = getConfig().theme.presence.entries[next];
                 jda.getPresence().setActivity(Activity.of(cfg.type, FORMATTER.apply(cfg.value), cfg.url));
             } catch (Exception e) {
                 // The configured presence entry is invalid!
                 LOGGER.warn("Unable to update the Discord bot presence to entry {}: {}", next, e.getMessage());
             } finally {
                 // Choose the next presence index
-                if (CONFIG.theme.presence.random)
-                    next = RANDOM.nextInt(CONFIG.theme.presence.entries.length);
+                if (getConfig().theme.presence.random)
+                    next = RANDOM.nextInt(getConfig().theme.presence.entries.length);
                 else
-                    next = (next + 1) % CONFIG.theme.presence.entries.length;
+                    next = (next + 1) % getConfig().theme.presence.entries.length;
             }
         }
     }
