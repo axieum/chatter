@@ -21,7 +21,7 @@ public class MinecraftStyle extends ChatStyleProvider
                                    .map(Team::getColor)
                                    .orElse(null);
         // Combine the team colour with the display name
-        return color != null ? color.toString() + name : name;
+        return color != null ? color + name : name;
     }
 
     public @NotNull String getGroupName(ServerPlayerEntity player)
