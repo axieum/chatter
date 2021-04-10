@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import static me.axieum.mcmod.chatter.impl.styling.ChatterStyling.CONFIG;
 import static me.axieum.mcmod.chatter.impl.styling.ChatterStyling.LOGGER;
+import static me.axieum.mcmod.chatter.impl.styling.ChatterStyling.getConfig;
 
 /**
  * Tweaks server received messages with configured formats.
@@ -30,7 +30,7 @@ public class ReceiveChatCallback implements ChatEvents.ReceiveChat
     public Text onReceiveMessage(ServerPlayerEntity player, String raw, Text text)
     {
         // Are there any styles configured?
-        if (CONFIG.chat.length < 1 || player == null) return text;
+        if (getConfig().chat.length < 1 || player == null) return text;
 
         // Fetch the registered chat style provider
         final ChatStyleProvider provider = ChatStyleProvider.getProvider();
@@ -41,7 +41,7 @@ public class ReceiveChatCallback implements ChatEvents.ReceiveChat
 
         // Determine the message style for the player
         final StylingConfig.ChatStyle style = PLAYER_CACHE.computeIfAbsent(player.getUuid(), uuid ->
-                Arrays.stream(CONFIG.chat)
+                Arrays.stream(getConfig().chat)
                       .filter(s -> {
                           // First, try to match the player's UUID
                           if (Arrays.asList(s.uuids).contains(uuid.toString()))
