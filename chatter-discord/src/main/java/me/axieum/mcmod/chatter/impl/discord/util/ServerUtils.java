@@ -12,9 +12,7 @@ import java.util.stream.LongStream;
 public final class ServerUtils
 {
     // Captured Minecraft server instance
-    public static @Nullable MinecraftServer INSTANCE = null;
-    // Captured Minecraft server crash report
-    public static @Nullable CrashReport CRASH_REPORT = null;
+    public static @Nullable MinecraftServer instance = null;
 
     /**
      * Returns the captured Minecraft server instance.
@@ -23,7 +21,7 @@ public final class ServerUtils
      */
     public static Optional<MinecraftServer> getInstance()
     {
-        return Optional.ofNullable(INSTANCE);
+        return Optional.ofNullable(instance);
     }
 
     /**
@@ -61,26 +59,18 @@ public final class ServerUtils
     }
 
     /**
-     * Returns the captured Minecraft server crash report.
+     * Returns the file for a given server crash report.
      *
-     * @return latest Minecraft server crash report if captured
+     * @param report a server crash report
+     * @return server crash report file if valid
      */
-    public static Optional<CrashReport> getCrashReport()
-    {
-        return Optional.ofNullable(CRASH_REPORT);
-    }
-
-    /**
-     * Returns the captured Minecraft server crash report file.
-     *
-     * @return latest Minecraft server crash report file if captured and valid
-     */
-    public static Optional<File> getCrashReportFile()
+    public static Optional<File> getCrashReportFile(@Nullable CrashReport report)
     {
         try {
-            return getCrashReport().map(CrashReportAccessor.class::cast)
-                                   .map(CrashReportAccessor::getFile)
-                                   .filter(File::exists);
+            return Optional.ofNullable(report)
+                           .map(CrashReportAccessor.class::cast)
+                           .map(CrashReportAccessor::getFile)
+                           .filter(File::exists);
         } catch (Exception e) {
             return Optional.empty();
         }
