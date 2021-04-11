@@ -3,25 +3,15 @@ package me.axieum.mcmod.chatter.impl.styling.integration;
 import me.axieum.mcmod.chatter.api.styling.ChatStyleProvider;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 public class MinecraftStyle extends ChatStyleProvider
 {
-    @Override
-    public @NotNull String getPlayerName(ServerPlayerEntity player)
+    public @NotNull String getGroup(ServerPlayerEntity player)
     {
-        // Get the player name
-        String name = super.getPlayerName(player);
-        // Check if there a team associated, and get its colour
-        Formatting color = Optional.ofNullable(player.getScoreboardTeam())
-                                   .map(Team.class::cast) // the AbstractTeam#getColor is client-only
-                                   .map(Team::getColor)
-                                   .orElse(null);
-        // Combine the team colour with the display name
-        return color != null ? color + name : name;
+        // Returns "operator" if they are a server operator, else "player"
+        return player.hasPermissionLevel(2) ? "operator" : "player";
     }
 
     public @NotNull String getGroupName(ServerPlayerEntity player)
@@ -30,9 +20,19 @@ public class MinecraftStyle extends ChatStyleProvider
         return player.hasPermissionLevel(2) ? "Operator" : "Player";
     }
 
-    public @NotNull String getGroup(ServerPlayerEntity player)
+    @Override
+    public @Nullable String getPrefix(ServerPlayerEntity player)
     {
-        // Returns "operator" if they are a server operator, else "player"
-        return player.hasPermissionLevel(2) ? "operator" : "player";
+        // Return the player's team prefix, if present
+        return player.getScoreboardTeam() != null ? ((Team) player.getScoreboardTeam()).getPrefix().getString()
+                                                  : null;
+    }
+
+    @Override
+    public @Nullable String getSuffix(ServerPlayerEntity player)
+    {
+        // Return the player's team suffix, if present
+        return player.getScoreboardTeam() != null ? ((Team) player.getScoreboardTeam()).getSuffix().getString()
+                                                  : null;
     }
 }
