@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.CommandClient;
 import me.axieum.mcmod.chatter.api.event.chat.ChatEvents;
 import me.axieum.mcmod.chatter.api.event.discord.JDAEvents;
 import me.axieum.mcmod.chatter.api.event.discord.MinecraftCommandEvents;
+import me.axieum.mcmod.chatter.api.event.discord.ServerShutdownCallback;
 import me.axieum.mcmod.chatter.api.event.player.PlayerEvents;
 import me.axieum.mcmod.chatter.api.event.world.EntityDeathMessageCallback;
 import me.axieum.mcmod.chatter.impl.discord.callback.discord.*;
@@ -86,7 +87,7 @@ public class ChatterDiscord implements DedicatedServerModInitializer, PreLaunchE
         ServerLifecycleEvents.SERVER_STARTING.register(new ServerLifecycleCallback());
         ServerLifecycleEvents.SERVER_STARTED.register(new ServerLifecycleCallback());
         ServerLifecycleEvents.SERVER_STOPPING.register(new ServerLifecycleCallback());
-        ServerLifecycleEvents.SERVER_STOPPED.register(new ServerLifecycleCallback());
+        ServerShutdownCallback.EVENT.register(new ServerLifecycleCallback());
         // Register player callbacks
         ServerPlayConnectionEvents.JOIN.register(new PlayerConnectionCallback());
         ServerPlayConnectionEvents.DISCONNECT.register(new PlayerConnectionCallback());
