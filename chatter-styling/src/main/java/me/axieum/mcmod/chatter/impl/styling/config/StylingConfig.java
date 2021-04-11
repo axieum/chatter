@@ -32,7 +32,7 @@ public class StylingConfig implements ConfigData
                 "Use ${username}, ${player}, ${message}, ${group}, ${prefix}, ${suffix}, ${team}, ${team_color}, " +
                 "${world} and ${datetime[:format]}")
         public String template =
-                "[\"\",{\"text\":\"${prefix}\"},{\"text\":\"${username}\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/tell ${username} \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Click to direct message\",\"italic\":true}]}},{\"text\":\"${suffix}\"},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${message}\"}]";
+                "[\"\",{\"text\":\"${player}\",\"color\":\"yellow\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"/tell ${username} \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Click to direct message\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${message}\"}]";
 
         @Comment("True if players can use colour codes in their messages, i.e. &[0-9a-fk-or]")
         public boolean color = false;
