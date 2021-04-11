@@ -1,11 +1,8 @@
 package me.axieum.mcmod.chatter.api.styling;
 
-import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public abstract class ChatStyleProvider
 {
@@ -32,6 +29,17 @@ public abstract class ChatStyleProvider
     }
 
     /**
+     * Returns the username of the player.
+     *
+     * @param player player
+     * @return player username
+     */
+    public @NotNull String getPlayer(ServerPlayerEntity player)
+    {
+        return player.getName().getString();
+    }
+
+    /**
      * Returns the display name of the player.
      *
      * @param player player
@@ -43,20 +51,20 @@ public abstract class ChatStyleProvider
     }
 
     /**
-     * Returns the display name of the group that the player belongs to.
-     *
-     * @param player player
-     * @return group display name
-     */
-    public abstract @NotNull String getGroupName(ServerPlayerEntity player);
-
-    /**
      * Returns the identifier of the group that the player belongs to.
      *
      * @param player player
      * @return group identifier
      */
     public abstract @NotNull String getGroup(ServerPlayerEntity player);
+
+    /**
+     * Returns the display name of the group that the player belongs to.
+     *
+     * @param player player
+     * @return group display name
+     */
+    public abstract @NotNull String getGroupName(ServerPlayerEntity player);
 
     /**
      * Returns the prefix for the player.
@@ -90,17 +98,6 @@ public abstract class ChatStyleProvider
     public @NotNull String getMessage(ServerPlayerEntity player, String message)
     {
         return message;
-    }
-
-    /**
-     * Returns the player's team name.
-     *
-     * @param player player
-     * @return team name
-     */
-    public @Nullable String getTeamName(ServerPlayerEntity player)
-    {
-        return Optional.ofNullable(player.getScoreboardTeam()).map(Team.class::cast).map(Team::getName).orElse(null);
     }
 
     /**
