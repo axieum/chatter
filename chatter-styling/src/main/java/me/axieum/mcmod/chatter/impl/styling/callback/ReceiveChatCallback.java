@@ -5,6 +5,7 @@ import me.axieum.mcmod.chatter.api.styling.ChatStyleProvider;
 import me.axieum.mcmod.chatter.impl.styling.config.StylingConfig;
 import me.axieum.mcmod.chatter.impl.util.MessageFormat;
 import me.axieum.mcmod.chatter.impl.util.StringUtils;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -61,12 +62,16 @@ public class ReceiveChatCallback implements ChatEvents.ReceiveChat
 
         // Define a message formatter
         final MessageFormat formatter = new MessageFormat()
+                .tokenize("username", provider.getPlayer(player))
                 .tokenize("player", provider.getPlayerName(player))
                 .tokenize("group", provider.getGroupName(player))
-                .optional("team", provider.getTeamName(player))
                 .optional("prefix", provider.getPrefix(player))
                 .optional("suffix", provider.getSuffix(player))
                 .tokenize("world", () -> StringUtils.getWorldName(player.world)) // lazy world name
+                .tokenize("team", () -> player.getScoreboardTeam() != null ? // lazy team name
+                                        ((Team) player.getScoreboardTeam()).getDisplayName().getString() : "")
+                .tokenize("team_color", () -> player.getScoreboardTeam() != null ? // lazy team color
+                                         ((Team) player.getScoreboardTeam()).getColor().getName() : "")
                 .datetime("datetime")
                 .regex(COLOR_CODE_PATTERN, m -> "\u00A7" + m.get(1)) // replace all colour codes up to this point
                 .tokenize("message", provider.getMessage(player, raw));

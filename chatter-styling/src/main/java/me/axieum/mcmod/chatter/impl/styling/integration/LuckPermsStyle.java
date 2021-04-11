@@ -29,6 +29,11 @@ public class LuckPermsStyle extends ChatStyleProvider
         });
     }
 
+    public @NotNull String getGroup(ServerPlayerEntity player)
+    {
+        return getUser(player).getPrimaryGroup();
+    }
+
     @Override
     public @NotNull String getGroupName(ServerPlayerEntity player)
     {
@@ -36,11 +41,6 @@ public class LuckPermsStyle extends ChatStyleProvider
         return Optional.ofNullable(LuckPermsProvider.get().getGroupManager().getGroup(name))
                        .map(PermissionHolder::getFriendlyName)
                        .orElse(name);
-    }
-
-    public @NotNull String getGroup(ServerPlayerEntity player)
-    {
-        return getUser(player).getPrimaryGroup();
     }
 
     @Override
