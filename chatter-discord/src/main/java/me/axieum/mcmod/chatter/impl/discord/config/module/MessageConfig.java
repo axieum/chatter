@@ -138,6 +138,17 @@ public class MessageConfig implements ConfigData
     }
 
     /**
+     * Determines whether the given channel identifier relates to any message entries.
+     *
+     * @param channel channel identifier
+     * @return true if the channel identifier is referenced by any message entries
+     */
+    public boolean hasChannel(final long channel)
+    {
+        return Arrays.stream(this.entries).anyMatch(entry -> entry.id == channel);
+    }
+
+    /**
      * Predicate for testing whether a dimension identifier is within scope of a message entry.
      */
     public static class DimensionPredicate implements Predicate<MessageEntry>

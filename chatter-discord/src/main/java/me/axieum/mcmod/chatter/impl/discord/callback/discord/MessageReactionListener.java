@@ -20,6 +20,10 @@ public class MessageReactionListener extends ListenerAdapter
         // Ignore the reaction if it was not issued from a guild
         if (!event.isFromGuild() || event.getMember() == null) return;
 
+        // Ignore the message if not in a configured channel
+        final long channelId = event.getChannel().getIdLong();
+        if (!getConfig().messages.hasChannel(channelId)) return;
+
         // First, retrieve the message context
         event.getTextChannel().retrieveMessageById(event.getMessageId()).queue(context -> {
             // Compute some useful properties of the event
@@ -39,7 +43,8 @@ public class MessageReactionListener extends ListenerAdapter
 
             // Dispatch a message to all players
             MinecraftDispatcher.json(entry -> formatter.apply(added ? entry.minecraft.react : entry.minecraft.unreact),
-                    entry -> (added ? entry.minecraft.react : entry.minecraft.unreact) != null);
+                    entry -> (added ? entry.minecraft.react : entry.minecraft.unreact) != null
+                            && entry.id == channelId);
 
             // Also, send the message to the server console
             if (added)
