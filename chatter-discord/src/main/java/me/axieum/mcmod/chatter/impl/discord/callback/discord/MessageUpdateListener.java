@@ -18,6 +18,7 @@ import java.util.Map;
 
 import static java.util.Collections.singletonList;
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.LOGGER;
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.getConfig;
 
 public class MessageUpdateListener extends ListenerAdapter
 {
@@ -49,12 +50,15 @@ public class MessageUpdateListener extends ListenerAdapter
                         .tokenize("author", event.getMember() != null ? event.getMember().getEffectiveName()
                                                                       : event.getAuthor().getName())
                         .tokenize("tag", event.getAuthor().getAsTag())
+                        .tokenize("username", event.getAuthor().getName())
+                        .tokenize("discriminator", event.getAuthor().getDiscriminator())
                         .tokenize("original", () -> FormatUtils.discordToMinecraft(original)) // lazy original
                         .tokenize("message", FormatUtils.discordToMinecraft(message))
                         .tokenize("diff", FormatUtils.discordToMinecraft(diff.get(0).getOldLine()));
                 // Dispatch a message to all players
+                final long channelId = event.getChannel().getIdLong();
                 MinecraftDispatcher.json((entry) -> formatter.apply(entry.minecraft.edit),
-                        (entry) -> entry.minecraft.edit != null);
+                        (entry) -> entry.minecraft.edit != null && entry.id == channelId);
                 // Also, send the message to the server console
                 LOGGER.info(formatter.apply("@${tag} > ${message}"));
             }
@@ -68,7 +72,7 @@ public class MessageUpdateListener extends ListenerAdapter
     public void onMessageReceived(@NotNull MessageReceivedEvent event)
     {
         // Update the message cache
-        if (!event.getAuthor().isBot())
+        if (!event.getAuthor().isBot() && getConfig().messages.hasChannel(event.getChannel().getIdLong()))
             MESSAGE_CACHE.put(event.getMessageId(), event.getMessage());
     }
 

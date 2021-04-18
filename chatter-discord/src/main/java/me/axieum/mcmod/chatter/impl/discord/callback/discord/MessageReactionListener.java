@@ -20,6 +20,10 @@ public class MessageReactionListener extends ListenerAdapter
         // Ignore the reaction if it was not issued from a guild
         if (!event.isFromGuild() || event.getMember() == null) return;
 
+        // Ignore the message if not in a configured channel
+        final long channelId = event.getChannel().getIdLong();
+        if (!getConfig().messages.hasChannel(channelId)) return;
+
         // First, retrieve the message context
         event.getTextChannel().retrieveMessageById(event.getMessageId()).queue(context -> {
             // Compute some useful properties of the event
@@ -30,16 +34,24 @@ public class MessageReactionListener extends ListenerAdapter
             // Prepare a message formatter
             final MessageFormat formatter = new MessageFormat()
                     .datetime("datetime")
+                    // Reaction Issuer
                     .tokenize("issuer", event.getMember().getEffectiveName())
                     .tokenize("issuer_tag", event.getMember().getUser().getAsTag())
+                    .tokenize("issuer_username", event.getMember().getUser().getName())
+                    .tokenize("issuer_discriminator", event.getMember().getUser().getDiscriminator())
+                    // Message Author
                     .tokenize("author", context.getMember() != null ? context.getMember().getEffectiveName()
                                                                     : context.getAuthor().getName())
                     .tokenize("author_tag", context.getAuthor().getAsTag())
+                    .tokenize("author_username", context.getAuthor().getName())
+                    .tokenize("author_discriminator", context.getAuthor().getDiscriminator())
+                    // Emote
                     .tokenize("emote", getConfig().theme.useUnicodeEmojis ? emote : EmojiParser.parseToAliases(emote));
 
             // Dispatch a message to all players
             MinecraftDispatcher.json(entry -> formatter.apply(added ? entry.minecraft.react : entry.minecraft.unreact),
-                    entry -> (added ? entry.minecraft.react : entry.minecraft.unreact) != null);
+                    entry -> (added ? entry.minecraft.react : entry.minecraft.unreact) != null
+                            && entry.id == channelId);
 
             // Also, send the message to the server console
             if (added)

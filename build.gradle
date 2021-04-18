@@ -157,7 +157,7 @@ curseforge {
 
         // Set the main artifact (i.e. mod jar)
         mainArtifact(file("${project.buildDir}/libs/${project.archivesBaseName}-${project.version}.jar")) {
-            displayName = "${project.findProperty('MOD_NAME') ?: project.name} ${project.version} for Minecraft ${MINECRAFT_VERSION}"
+            displayName = "${project.findProperty('MOD_NAME') ?: project.name} v${project.version} for Minecraft ${MINECRAFT_VERSION}"
         }
 
         // Add additional main artifacts (e.g. dev jars, etc.)
@@ -193,7 +193,7 @@ task github(dependsOn: remapJar) {
 
         // Tag the latest commit, and hence prepare a new release
         def builder = new GHReleaseBuilder(repository, "v${project.version}")
-        builder.name("${project.findProperty('MOD_NAME') ?: project.name} ${project.version} for Minecraft ${MINECRAFT_VERSION}")
+        builder.name("${project.findProperty('MOD_NAME') ?: project.name} v${project.version} for Minecraft ${MINECRAFT_VERSION}")
         builder.body("For a list of changes, please refer to https://github.com/${project.GITHUB_REPO}/commits")
         builder.prerelease(project.version.endsWith('alpha') || project.version.endsWith('beta'))
         builder.commitish(project.GITHUB_BRANCH as String)

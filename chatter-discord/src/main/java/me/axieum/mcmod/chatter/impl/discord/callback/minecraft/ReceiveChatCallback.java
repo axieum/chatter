@@ -21,6 +21,7 @@ public class ReceiveChatCallback implements ChatEvents.ReceiveChat
             // Prepare a message formatter
             final MessageFormat formatter = new MessageFormat()
                     .datetime("datetime")
+                    .tokenize("username", player.getName().getString())
                     .tokenize("player", player.getDisplayName().getString())
                     .tokenize("message", FormatUtils.minecraftToDiscord(raw))
                     .tokenize("world", StringUtils.getWorldName(player.world));

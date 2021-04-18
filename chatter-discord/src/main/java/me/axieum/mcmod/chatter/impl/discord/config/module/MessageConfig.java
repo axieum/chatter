@@ -33,11 +33,11 @@ public class MessageConfig implements ConfigData
         public static class Discord
         {
             @Comment("A player sent an in-game message\n" +
-                    "Use ${player}, ${message}, ${world} and ${datetime[:format]}")
+                    "Use ${username}, ${player}, ${message}, ${world} and ${datetime[:format]}")
             public String chat = "`${world}` **${player}** > ${message}";
 
             @Comment("A player died\n" +
-                    "Use ${player}, ${cause}, ${world}, ${x}, ${y}, ${z}, " +
+                    "Use ${username}, ${player}, ${cause}, ${world}, ${x}, ${y}, ${z}, " +
                     "${score}, ${exp}, ${lifespan[:format]} and ${datetime[:format]}")
             public String death = "**${player}** ${cause}!\n:skull: _${world} | ${x}, ${y}, ${z}_";
 
@@ -46,19 +46,19 @@ public class MessageConfig implements ConfigData
             public String grief = "**${name}** ${cause}! :coffin:";
 
             @Comment("A player unlocked an advancement\n" +
-                    "Use ${player}, ${type}, ${title}, ${description} and ${datetime[:format]}")
+                    "Use ${username}, ${player}, ${type}, ${title}, ${description} and ${datetime[:format]}")
             public String advancement = "**${player}** completed the ${type} **${title}**! :clap:\n_${description}_";
 
             @Comment("A player teleported to another dimension\n" +
-                    "Use ${player}, ${origin}, ${destination} and ${datetime[:format]}")
+                    "Use ${username}, ${player}, ${origin}, ${destination} and ${datetime[:format]}")
             public String teleport = "**${player}** entered ${destination}. :cyclone:";
 
             @Comment("A player joined the game\n" +
-                    "Use ${player}, ${world} and ${datetime[:format]}")
+                    "Use ${username}, ${player}, ${world} and ${datetime[:format]}")
             public String join = "**${player}** joined!";
 
             @Comment("A player left the game\n" +
-                    "Use ${player}, ${world}, ${elapsed[:format]} and ${datetime[:format]}")
+                    "Use ${username}, ${player}, ${world}, ${elapsed[:format]} and ${datetime[:format]}")
             public String leave = "**${player}** left!";
 
             @Comment("The server began to start\n" +
@@ -93,23 +93,28 @@ public class MessageConfig implements ConfigData
         {
             @Comment("A user sent a message\n" +
                     "NB: Use JSON style, check out https://minecraftjson.com/ (third party)\n" +
-                    "Use ${author}, ${tag}, ${message} and ${datetime[:format]}")
+                    "Use ${author}, ${tag}, ${username}, ${discriminator}, ${message} and ${datetime[:format]}")
             public String chat = "[\"\",{\"text\":\"${author}\",\"color\":\"#00aaff\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"@${tag} \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Sent from Discord\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${message}\"}]";
 
             @Comment("A user edited their recently sent message\n" +
-                    "Use ${author}, ${tag}, ${diff}, ${original}, ${message} and ${datetime[:format]}")
+                    "Use ${author}, ${tag}, ${username}, ${discriminator}, ${diff}, ${original}, ${message} and ${datetime[:format]}")
             public String edit = "[\"\",{\"text\":\"${author}\",\"color\":\"#00aaff\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"@${tag} \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Sent from Discord\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${diff}\"}]";
 
             @Comment("A user reacted to a recent message\n" +
-                    "Use ${issuer}, ${issuer_tag}, ${author}, ${author_tag}, ${emote} and ${datetime[:format]}")
+                    "Use ${issuer}, ${issuer_tag}, ${issuer_username}, ${issuer_discriminator}, " +
+                    "${author}, ${author_tag}, ${author_username}, ${author_discriminator}, " +
+                    "${emote} and ${datetime[:format]}")
             public String react = "[\"\",{\"text\":\"${issuer}\",\"color\":\"#00aaff\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"@${issuer_tag} \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Sent from Discord\",\"italic\":true}]}},{\"text\":\" reacted with \"},{\"text\":\"${emote}\",\"color\":\"green\"},{\"text\": \" to \"},{\"text\":\"${author}\",\"color\":\"#00aaff\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"@${author_tag} \"}},{\"text\":\"'s message\"}]";
 
             @Comment("A user removed their reaction from a recent message\n" +
-                    "Use ${issuer}, ${issuer_tag}, ${author}, ${author_tag}, ${emote} and ${datetime[:format]}")
+                    "Use ${issuer}, ${issuer_tag}, ${issuer_username}, ${issuer_discriminator}, " +
+                    "${author}, ${author_tag}, ${author_username}, ${author_discriminator}, " +
+                    "${emote} and ${datetime[:format]}")
             public String unreact = "[\"\",{\"text\":\"${issuer}\",\"color\":\"#00aaff\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"@${issuer_tag} \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Sent from Discord\",\"italic\":true}]}},{\"text\":\" removed their reaction of \"},{\"text\":\"${emote}\",\"color\":\"red\"},{\"text\": \" from \"},{\"text\":\"${author}\",\"color\":\"#00aaff\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"@${author_tag} \"}},{\"text\":\"'s message\"}]";
 
             @Comment("A user sent a message that contained attachments\n" +
-                    "Use ${author}, ${tag}, ${url}, ${name}, ${ext}, ${size} and ${datetime[:format]}")
+                    "Use ${author}, ${tag}, ${username}, ${discriminator}, " +
+                    "${url}, ${name}, ${ext}, ${size} and ${datetime[:format]}")
             public String attachment = "[\"\",{\"text\":\"${author}\",\"color\":\"#00aaff\",\"clickEvent\":{\"action\":\"suggest_command\",\"value\":\"@${tag} \"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[\"\",{\"text\":\"Sent from Discord\",\"italic\":true}]}},{\"text\":\" > \",\"color\":\"dark_gray\"},{\"text\":\"${name}\",\"color\":\"blue\",\"underlined\":true,\"clickEvent\":{\"action\":\"open_url\",\"value\":\"${url}\"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":{\"text\":\"${ext} (${size})\"}}}]";
         }
     }
@@ -135,6 +140,17 @@ public class MessageConfig implements ConfigData
         } catch (Exception e) {
             throw new ValidationException("Invalid text JSON template", e);
         }
+    }
+
+    /**
+     * Determines whether the given channel identifier relates to any message entries.
+     *
+     * @param channel channel identifier
+     * @return true if the channel identifier is referenced by any message entries
+     */
+    public boolean hasChannel(final long channel)
+    {
+        return Arrays.stream(this.entries).anyMatch(entry -> entry.id == channel);
     }
 
     /**
