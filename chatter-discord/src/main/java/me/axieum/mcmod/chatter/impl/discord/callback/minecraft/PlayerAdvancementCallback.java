@@ -24,6 +24,7 @@ public class PlayerAdvancementCallback implements PlayerEvents.GrantCriterion
             // Prepare a message formatter
             final MessageFormat formatter = new MessageFormat()
                     .datetime("datetime")
+                    .tokenize("username", player.getName().getString())
                     .tokenize("player", player.getDisplayName().getString())
                     .tokenize("type", info.getFrame().getId())
                     .tokenize("title", info.getTitle().getString())

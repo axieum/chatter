@@ -36,6 +36,7 @@ public class PlayerConnectionCallback implements Join, Disconnect
             final String playerName = handler.player.getDisplayName().getString();
             final MessageFormat formatter = new MessageFormat()
                     .datetime("datetime")
+                    .tokenize("username", handler.player.getName().getString())
                     .tokenize("player", playerName)
                     .tokenize("world", StringUtils.getWorldName(handler.player.world));
 
@@ -56,6 +57,7 @@ public class PlayerConnectionCallback implements Join, Disconnect
             final String playerName = handler.player.getDisplayName().getString();
             final MessageFormat formatter = new MessageFormat()
                     .datetime("datetime")
+                    .tokenize("username", handler.player.getName().getString())
                     .tokenize("player", playerName)
                     .tokenize("world", StringUtils.getWorldName(handler.player.world))
                     .duration("elapsed", getPlayerElapsed(handler.player));

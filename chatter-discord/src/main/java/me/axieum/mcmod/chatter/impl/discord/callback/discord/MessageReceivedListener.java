@@ -25,9 +25,10 @@ public class MessageReceivedListener extends ListenerAdapter
         if (!getConfig().messages.hasChannel(channelId)) return;
 
         // Capture common message details
-        final String author = event.getMember() != null ? event.getMember().getEffectiveName()
-                                                        : event.getAuthor().getName();
         final String tag = event.getAuthor().getAsTag();
+        final String username = event.getAuthor().getName();
+        final String discriminator = event.getAuthor().getDiscriminator();
+        final String author = event.getMember() != null ? event.getMember().getEffectiveName() : username;
 
         // Push any message content
         if (!event.getMessage().getContentRaw().isEmpty()) {
@@ -36,6 +37,8 @@ public class MessageReceivedListener extends ListenerAdapter
                     .datetime("datetime")
                     .tokenize("author", author)
                     .tokenize("tag", tag)
+                    .tokenize("username", username)
+                    .tokenize("discriminator", discriminator)
                     .tokenize("message", FormatUtils.discordToMinecraft(event.getMessage().getContentDisplay()));
             // Dispatch a message to all players
             MinecraftDispatcher.json((entry) -> formatter.apply(entry.minecraft.chat),
@@ -51,6 +54,8 @@ public class MessageReceivedListener extends ListenerAdapter
                     .datetime("datetime")
                     .tokenize("author", author)
                     .tokenize("tag", tag)
+                    .tokenize("username", username)
+                    .tokenize("discriminator", discriminator)
                     .tokenize("url", attachment.getUrl())
                     .tokenize("name", attachment.getFileName())
                     .tokenize("ext", attachment.getFileExtension())

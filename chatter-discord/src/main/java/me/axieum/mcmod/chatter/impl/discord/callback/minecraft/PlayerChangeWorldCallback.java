@@ -19,6 +19,7 @@ public class PlayerChangeWorldCallback implements ServerEntityWorldChangeEvents.
             // Prepare a message formatter
             final MessageFormat formatter = new MessageFormat()
                     .datetime("datetime")
+                    .tokenize("username", player.getName().getString())
                     .tokenize("player", player.getDisplayName().getString())
                     .tokenize("origin", StringUtils.getWorldName(origin))
                     .tokenize("destination", StringUtils.getWorldName(destination));

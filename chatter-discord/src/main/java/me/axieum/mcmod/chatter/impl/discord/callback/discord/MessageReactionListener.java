@@ -34,11 +34,18 @@ public class MessageReactionListener extends ListenerAdapter
             // Prepare a message formatter
             final MessageFormat formatter = new MessageFormat()
                     .datetime("datetime")
+                    // Reaction Issuer
                     .tokenize("issuer", event.getMember().getEffectiveName())
                     .tokenize("issuer_tag", event.getMember().getUser().getAsTag())
+                    .tokenize("issuer_username", event.getMember().getUser().getName())
+                    .tokenize("issuer_discriminator", event.getMember().getUser().getDiscriminator())
+                    // Message Author
                     .tokenize("author", context.getMember() != null ? context.getMember().getEffectiveName()
                                                                     : context.getAuthor().getName())
                     .tokenize("author_tag", context.getAuthor().getAsTag())
+                    .tokenize("author_username", context.getAuthor().getName())
+                    .tokenize("author_discriminator", context.getAuthor().getDiscriminator())
+                    // Emote
                     .tokenize("emote", getConfig().theme.useUnicodeEmojis ? emote : EmojiParser.parseToAliases(emote));
 
             // Dispatch a message to all players
