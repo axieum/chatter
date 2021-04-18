@@ -27,6 +27,7 @@ public class PlayerDeathCallback implements PlayerEvents.Death
             final String playerName = player.getDisplayName().getString();
             final MessageFormat formatter = new MessageFormat()
                     .datetime("datetime")
+                    .tokenize("username", player.getName().getString())
                     .tokenize("player", playerName)
                     .tokenize("cause", source.getDeathMessage(player).getString()
                                              .replaceFirst(playerName, "").trim())

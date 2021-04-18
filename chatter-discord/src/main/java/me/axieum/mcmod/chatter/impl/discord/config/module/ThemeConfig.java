@@ -45,7 +45,9 @@ public class ThemeConfig implements ConfigData
             @Comment("The type of presence (see https://git.io/Jqkez)")
             public ActivityType type = ActivityType.DEFAULT;
 
-            @Comment("The text value that is put on display")
+            @Comment("The text value that is put on display\n" +
+                    "Use ${version}, ${ip}, ${port}, ${motd}, ${difficulty}, ${max_players}, ${player_count}, ${tps}, " +
+                    "${tps_time}, ${uptime} and ${datetime[:format]}")
             public String value = "Minecraft";
 
             @Comment("If defined, sets the URL of the underlying media, e.g. Twitch stream")

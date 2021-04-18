@@ -50,6 +50,8 @@ public class MessageUpdateListener extends ListenerAdapter
                         .tokenize("author", event.getMember() != null ? event.getMember().getEffectiveName()
                                                                       : event.getAuthor().getName())
                         .tokenize("tag", event.getAuthor().getAsTag())
+                        .tokenize("username", event.getAuthor().getName())
+                        .tokenize("discriminator", event.getAuthor().getDiscriminator())
                         .tokenize("original", () -> FormatUtils.discordToMinecraft(original)) // lazy original
                         .tokenize("message", FormatUtils.discordToMinecraft(message))
                         .tokenize("diff", FormatUtils.discordToMinecraft(diff.get(0).getOldLine()));
