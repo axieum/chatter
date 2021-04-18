@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.LOGGER;
+import static me.axieum.mcmod.chatter.impl.discord.ChatterDiscord.getConfig;
 
 public class MessageReceivedListener extends ListenerAdapter
 {
@@ -18,6 +19,10 @@ public class MessageReceivedListener extends ListenerAdapter
     {
         // Ignore the message if the author is a bot
         if (event.getAuthor().isBot()) return;
+
+        // Ignore the message if not in a configured channel
+        final long channelId = event.getChannel().getIdLong();
+        if (!getConfig().messages.hasChannel(channelId)) return;
 
         // Capture common message details
         final String author = event.getMember() != null ? event.getMember().getEffectiveName()
@@ -34,7 +39,7 @@ public class MessageReceivedListener extends ListenerAdapter
                     .tokenize("message", FormatUtils.discordToMinecraft(event.getMessage().getContentDisplay()));
             // Dispatch a message to all players
             MinecraftDispatcher.json((entry) -> formatter.apply(entry.minecraft.chat),
-                    (entry) -> entry.minecraft.chat != null);
+                    (entry) -> entry.minecraft.chat != null && entry.id == channelId);
             // Also, send the message to the server console
             LOGGER.info(formatter.apply("@${tag} > ${message}"));
         }
@@ -52,7 +57,7 @@ public class MessageReceivedListener extends ListenerAdapter
                     .tokenize("size", StringUtils.bytesToHuman(attachment.getSize()));
             // Dispatch a message to all players
             MinecraftDispatcher.json((entry) -> formatter.apply(entry.minecraft.attachment),
-                    (entry) -> entry.minecraft.attachment != null);
+                    (entry) -> entry.minecraft.attachment != null && entry.id == channelId);
             // Also, send the message to the server console
             LOGGER.info(formatter.apply("@${tag} attached ${name} (${size})"));
         }
